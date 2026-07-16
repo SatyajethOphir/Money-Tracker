@@ -1,0 +1,31 @@
+[
+  {
+    "id": "hx0fxgwey",
+    "fullName": "Satyajeeth Ophir Peruka",
+    "email": "sop@januzen.in",
+    "passwordHash": "$2b$10$ag.WpgNQ5utydZV.Zv4DGOZwJ1f5hG1CQA/R9wQSX8GkteCw1rRI2",
+    "createdAt": "2026-07-16T17:52:05.603Z",
+    "preferences": {
+      "language": "en",
+      "currency": "USD",
+      "theme": "light",
+      "notifications": {
+        "pushEnabled": true,
+        "achievementEnabled": true,
+        "reminderDays": [
+          7,
+          3,
+          1,
+          0
+        ],
+        "quietHoursStart": "22:00",
+        "quietHoursEnd": "08:00",
+        "sound": "default",
+        "vibration": true,
+        "maxDaily": 5
+      }
+    },
+    "pushSubscriptions": [],
+    "achievements": []
+  }
+]

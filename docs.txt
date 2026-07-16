@@ -1,0 +1,5 @@
+mongodb_pass= v3X2iLd5anbB7l0t
+
+mongodb_username = developersop
+
+mongo_URI = mongodb+srv://developersop:v3X2iLd5anbB7l0t@cluster0.daigvzr.mongodb.net/?appName=Cluster0
