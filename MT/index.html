@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" class="h-full bg-zinc-950 text-zinc-100">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Shim global window.fetch to be a writable data property, preventing errors in sandboxed iframes
+      (function() {
+        try {
+          const originalFetch = window.fetch;
+          if (!originalFetch) return;
+
+          // Helper to redefine a property as a writable, configurable data property
+          function makeWritable(obj, prop, value) {
+            try {
+              const desc = Object.getOwnPropertyDescriptor(obj, prop);
+              if (desc && !desc.configurable) {
+                return false;
+              }
+              Object.defineProperty(obj, prop, {
+                value: value,
+                writable: true,
+                configurable: true,
+                enumerable: true
+              });
+              return true;
+            } catch (e) {}
+            return false;
+          }
+
+          // Try to delete existing fetch property to clear any getter-only descriptors
+          try {
+            delete window.fetch;
+          } catch (e) {}
+          try {
+            delete Window.prototype.fetch;
+          } catch (e) {}
+
+          // Attempt to redefine fetch as a direct writable data property on both window and its prototype
+          const successWin = makeWritable(window, 'fetch', originalFetch);
+          const successProto = makeWritable(Window.prototype, 'fetch', originalFetch);
+
+          // Fallback: if either of them could not be made a direct writable data property,
+          // we set up a getter/setter accessor on them so that setting fetch does not crash the app.
+          if (!successWin || !successProto) {
+            let currentFetch = originalFetch;
+            try {
+              Object.defineProperty(window, 'fetch', {
+                get() { return currentFetch; },
+                set(val) { currentFetch = val; },
+                configurable: true,
+                enumerable: true
+              });
+            } catch (e) {}
+            try {
+              Object.defineProperty(Window.prototype, 'fetch', {
+                get() { return currentFetch; },
+                set(val) { currentFetch = val; },
+                configurable: true,
+                enumerable: true
+              });
+            } catch (e) {}
+          }
+        } catch (globalErr) {
+          console.warn('Fetch shim error:', globalErr);
+        }
+      })();
+    </script>
+    <script>
+      // Prevent theme flickering during page load
+      (function() {
+        try {
+          var theme = 'system';
+          var savedUser = localStorage.getItem('emi_tracker_user');
+          if (savedUser) {
+            try {
+              var userObj = JSON.parse(savedUser);
+              if (userObj && userObj.preferences && userObj.preferences.theme) {
+                theme = userObj.preferences.theme;
+              }
+            } catch (e) {}
+          } else {
+            var localTheme = localStorage.getItem('emi_tracker_theme');
+            if (localTheme) {
+              theme = localTheme;
+            }
+          }
+          if (theme === 'system') {
+            var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            theme = systemPrefersDark ? 'dark' : 'light';
+          }
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (err) {}
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EMI & Loan Tracker</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <meta name="theme-color" content="#06b6d4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  </head>
+  <body class="h-full">
+    <div id="root" class="h-full"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
