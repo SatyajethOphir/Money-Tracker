@@ -1,10 +1,10 @@
-const CACHE_NAME = 'emi-tracker-cache-v2';
+const CACHE_NAME = 'emi-tracker-cache-BUILD_TIMESTAMP';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/logo.png',
   '/favicon.png',
-  '/logo.jpg',
   '/icon.png',
   '/icon-512.png',
   '/icon-72.png',

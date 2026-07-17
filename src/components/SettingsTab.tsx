@@ -14,6 +14,7 @@ interface SettingsTabProps {
   t: (key: string) => string;
   deferredPrompt?: any;
   onInstallApp?: () => void;
+  isInstalled?: boolean;
 }
 
 export default function SettingsTab({
@@ -25,7 +26,8 @@ export default function SettingsTab({
   triggerNotificationPermission,
   t,
   deferredPrompt,
-  onInstallApp
+  onInstallApp,
+  isInstalled
 }: SettingsTabProps) {
   // Profile Form States
   const [fullName, setFullName] = useState(user.fullName || '');
@@ -465,24 +467,24 @@ export default function SettingsTab({
               <div className="bg-zinc-950 border border-zinc-800/60 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                   <span className="text-xs font-bold text-zinc-300 block">Installation Status</span>
-                  {window.matchMedia('(display-mode: standalone)').matches ? (
+                  {window.matchMedia('(display-mode: standalone)').matches || isInstalled ? (
                     <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1 mt-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                      ✓ Installed & Running Standalone
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      ✓ Installed (Running Standalone App)
                     </span>
                   ) : deferredPrompt ? (
                     <span className="text-[10px] text-cyan-400 font-bold flex items-center gap-1 mt-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
-                      Ready to Install
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-bounce"></span>
+                      Ready to Install (Installation Available)
                     </span>
                   ) : (
                     <span className="text-[10px] text-zinc-500 flex items-center gap-1 mt-1">
-                      Running in Web Browser
+                      Not Installed (Running in Web Browser)
                     </span>
                   )}
                 </div>
                 
-                {deferredPrompt && onInstallApp && (
+                {deferredPrompt && onInstallApp && !(window.matchMedia('(display-mode: standalone)').matches || isInstalled) && (
                   <button
                     type="button"
                     onClick={onInstallApp}
@@ -493,7 +495,7 @@ export default function SettingsTab({
                 )}
               </div>
 
-              {!window.matchMedia('(display-mode: standalone)').matches && (
+              {!(window.matchMedia('(display-mode: standalone)').matches || isInstalled) && (
                 <div className="bg-zinc-950/40 border border-zinc-800/50 rounded-2xl p-4 mt-2 space-y-3">
                   <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">How to Install on Your Device</span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

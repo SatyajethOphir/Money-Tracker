@@ -442,6 +442,14 @@ export default function App() {
     // 1. Check if running in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone) {
       setIsInstalled(true);
+    } else if ('getInstalledRelatedApps' in navigator) {
+      (navigator as any).getInstalledRelatedApps().then((relatedApps: any[]) => {
+        if (relatedApps && relatedApps.length > 0) {
+          setIsInstalled(true);
+        }
+      }).catch((err: any) => {
+        console.warn('getInstalledRelatedApps failed:', err);
+      });
     }
 
     // 2. Listen for PWA install prompt
@@ -1242,7 +1250,7 @@ export default function App() {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center space-y-6 font-sans select-none animate-pulse">
         <div className="w-20 h-20 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
-          <img src="/logo.jpg" alt="EMI Tracker Logo" className="w-full h-full object-cover animate-spin-slow" />
+          <img src="/logo.png" alt="EMI Tracker Logo" className="w-full h-full object-cover animate-spin-slow" />
         </div>
         <div className="flex flex-col items-center space-y-2">
           <div className="w-10 h-10 border-2 border-cyan-500/10 border-t-cyan-400 rounded-full animate-spin mb-2" />
@@ -1268,7 +1276,7 @@ export default function App() {
       <aside id="desktop_sidebar" className="hidden md:flex flex-col w-64 bg-zinc-900 border-r border-zinc-800 shrink-0">
         <div className="flex items-center gap-3 p-6 border-b border-zinc-800">
           <div className="flex items-center justify-center w-9 h-9 rounded-lg overflow-hidden bg-zinc-950 border border-zinc-800 shadow-inner">
-            <img src="/logo.jpg" alt="EMI Tracker Logo" className="w-full h-full object-cover" />
+            <img src="/logo.png" alt="EMI Tracker Logo" className="w-full h-full object-cover" />
           </div>
           <div>
             <h1 className="font-semibold text-zinc-100 tracking-tight leading-tight">{t('app_title')}</h1>
@@ -1412,7 +1420,7 @@ export default function App() {
         <header id="mobile_header" className="flex items-center justify-between md:hidden px-6 py-4 bg-zinc-900 border-b border-zinc-800">
           <div className="flex items-center gap-2.5">
             <div className="flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden bg-zinc-950 border border-zinc-800">
-              <img src="/logo.jpg" alt="EMI Tracker Logo" className="w-full h-full object-cover" />
+              <img src="/logo.png" alt="EMI Tracker Logo" className="w-full h-full object-cover" />
             </div>
             <h1 className="font-semibold text-sm text-zinc-100 tracking-tight">EMI Tracker</h1>
           </div>
@@ -2255,6 +2263,7 @@ export default function App() {
               token={token || ''}
               deferredPrompt={deferredPrompt}
               onInstallApp={handleInstallApp}
+              isInstalled={isInstalled}
               onProfileUpdate={(updatedUser) => {
                 setUser(updatedUser);
                 localStorage.setItem('emi_tracker_user', JSON.stringify(updatedUser));
