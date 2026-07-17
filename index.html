@@ -13,32 +13,38 @@
           function makeWritable(obj, prop, value) {
             try {
               const desc = Object.getOwnPropertyDescriptor(obj, prop);
-              if (!desc || desc.configurable) {
-                Object.defineProperty(obj, prop, {
-                  value: value,
-                  writable: true,
-                  configurable: true,
-                  enumerable: true
-                });
-                return true;
+              if (desc && !desc.configurable) {
+                return false;
               }
+              Object.defineProperty(obj, prop, {
+                value: value,
+                writable: true,
+                configurable: true,
+                enumerable: true
+              });
+              return true;
             } catch (e) {}
             return false;
           }
 
-          // Redefine fetch on Window.prototype first (where fetch is normally defined)
-          let success = makeWritable(Window.prototype, 'fetch', originalFetch);
+          // Try to delete existing fetch property to clear any getter-only descriptors
+          try {
+            delete window.fetch;
+          } catch (e) {}
+          try {
+            delete Window.prototype.fetch;
+          } catch (e) {}
 
-          // Redefine fetch on window directly as fallback
-          if (!success) {
-            success = makeWritable(window, 'fetch', originalFetch);
-          }
+          // Attempt to redefine fetch as a direct writable data property on both window and its prototype
+          const successWin = makeWritable(window, 'fetch', originalFetch);
+          const successProto = makeWritable(Window.prototype, 'fetch', originalFetch);
 
-          // Fallback: If we cannot make it a direct data property, define getter/setter
-          if (!success) {
+          // Fallback: if either of them could not be made a direct writable data property,
+          // we set up a getter/setter accessor on them so that setting fetch does not crash the app.
+          if (!successWin || !successProto) {
             let currentFetch = originalFetch;
             try {
-              Object.defineProperty(Window.prototype, 'fetch', {
+              Object.defineProperty(window, 'fetch', {
                 get() { return currentFetch; },
                 set(val) { currentFetch = val; },
                 configurable: true,
@@ -46,7 +52,7 @@
               });
             } catch (e) {}
             try {
-              Object.defineProperty(window, 'fetch', {
+              Object.defineProperty(Window.prototype, 'fetch', {
                 get() { return currentFetch; },
                 set(val) { currentFetch = val; },
                 configurable: true,
