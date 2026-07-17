@@ -12,6 +12,7 @@ const STATIC_ASSETS = [
   '/icon-128.png',
   '/icon-144.png',
   '/icon-152.png',
+  '/icon-180.png',
   '/icon-192.png',
   '/icon-384.png'
 ];
@@ -81,8 +82,38 @@ self.addEventListener('fetch', (event) => {
           });
         })
     );
+  } else if (
+    request.mode === 'navigate' || 
+    (request.headers.get('accept') && request.headers.get('accept').includes('text/html')) ||
+    url.pathname === '/' ||
+    url.pathname === '/index.html' ||
+    url.pathname === '/manifest.json'
+  ) {
+    // Network First, Cache Fallback for HTML documents and manifest to prevent stale assets
+    event.respondWith(
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          console.log('[Service Worker] Serving offline fallback for:', url.pathname);
+          return caches.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // If requesting navigation/index.html but not cached, fallback to root
+            return caches.match('/');
+          });
+        })
+    );
   } else {
-    // Handle Static Assets (Cache First, Network Fallback)
+    // Handle other static assets (Cache First, Network Fallback)
     event.respondWith(
       caches.match(request).then((cachedResponse) => {
         if (cachedResponse) {
@@ -90,7 +121,7 @@ self.addEventListener('fetch', (event) => {
         }
 
         return fetch(request).then((networkResponse) => {
-          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+          if (!networkResponse || networkResponse.status !== 200) {
             return networkResponse;
           }
 
@@ -100,12 +131,6 @@ self.addEventListener('fetch', (event) => {
           });
 
           return networkResponse;
-        }).catch(() => {
-          // If HTML request fails and offline, return the index.html fallback
-          const acceptHeader = request.headers.get('accept');
-          if (request.mode === 'navigate' || (acceptHeader && acceptHeader.includes('text/html'))) {
-            return caches.match('/');
-          }
         });
       })
     );

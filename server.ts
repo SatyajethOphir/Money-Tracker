@@ -1382,6 +1382,20 @@ const startServer = async () => {
   if (process.env.NODE_ENV === 'production' || process.env.DISABLE_HMR === 'true') {
     const distPath = path.join(__dirname, 'dist');
     if (fs.existsSync(distPath)) {
+      // Explicit route for service worker with cache control
+      app.get('/sw.js', (req, res) => {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Content-Type', 'application/javascript');
+        res.sendFile(path.join(distPath, 'sw.js'));
+      });
+
+      // Explicit route for manifest.json with cache control
+      app.get('/manifest.json', (req, res) => {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Content-Type', 'application/json');
+        res.sendFile(path.join(distPath, 'manifest.json'));
+      });
+
       app.use(express.static(distPath));
       app.get('*', (req, res) => {
         res.sendFile(path.join(distPath, 'index.html'));

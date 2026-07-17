@@ -3,21 +3,16 @@ import fs from 'fs';
 import path from 'path';
 
 const PUBLIC_DIR = './public';
-const LOGO_JPG = path.join(PUBLIC_DIR, 'logo.jpg');
 const LOGO_PNG = path.join(PUBLIC_DIR, 'logo.png');
 
 async function main() {
   try {
-    if (!fs.existsSync(LOGO_JPG)) {
-      console.error('Error: logo.jpg does not exist in /public');
+    if (!fs.existsSync(LOGO_PNG)) {
+      console.error('Error: logo.png does not exist in /public');
       process.exit(1);
     }
 
-    console.log('Converting logo.jpg to logo.png...');
-    await sharp(LOGO_JPG)
-      .png()
-      .toFile(LOGO_PNG);
-    console.log('Successfully created logo.png');
+    console.log('Using logo.png as the single master branding asset...');
 
     const sizes = [
       { size: 72, name: 'icon-72.png' },
@@ -25,6 +20,7 @@ async function main() {
       { size: 128, name: 'icon-128.png' },
       { size: 144, name: 'icon-144.png' },
       { size: 152, name: 'icon-152.png' },
+      { size: 180, name: 'icon-180.png' },
       { size: 192, name: 'icon-192.png' },
       { size: 384, name: 'icon-384.png' },
       { size: 512, name: 'icon-512.png' },
@@ -35,10 +31,18 @@ async function main() {
     for (const item of sizes) {
       const destPath = path.join(PUBLIC_DIR, item.name);
       console.log(`Generating ${item.name} (${item.size}x${item.size})...`);
+      
+      // Temporary path to avoid any potential locking issues (though logo.png is not written to)
+      const tempPath = destPath + '.tmp';
       await sharp(LOGO_PNG)
         .resize(item.size, item.size)
         .png()
-        .toFile(destPath);
+        .toFile(tempPath);
+      
+      if (fs.existsSync(destPath)) {
+        fs.unlinkSync(destPath);
+      }
+      fs.renameSync(tempPath, destPath);
     }
 
     console.log('All icons generated successfully!');
