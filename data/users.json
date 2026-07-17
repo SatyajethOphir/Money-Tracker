@@ -26,5 +26,132 @@
       }
     },
     "pushSubscriptions": []
+  },
+  {
+    "id": "45ap7cwd6",
+    "achievements": [
+      "first-emi",
+      "extra-payment",
+      "interest-saved",
+      "repaid-25",
+      "repaid-50"
+    ],
+    "email": "sop@gmail.com",
+    "fullName": "SOP",
+    "passwordHash": "$2b$10$x7Vma8W5AjZ00nbKagywEO7sl5z4SSgPJHiaR34gNh.xpy2I/vh8G",
+    "preferences": {
+      "language": "en",
+      "currency": "INR",
+      "theme": "dark",
+      "notifications": {
+        "pushEnabled": true,
+        "achievementEnabled": true,
+        "reminderDays": [
+          7,
+          3,
+          1,
+          0
+        ],
+        "quietHoursStart": "22:00",
+        "quietHoursEnd": "08:00",
+        "sound": "default",
+        "vibration": true,
+        "maxDaily": 5
+      }
+    },
+    "pushSubscriptions": [
+      {
+        "endpoint": "https://fcm.googleapis.com/fcm/send/dwourK83w6E:APA91bHCp3ah1y6n_nsiTfhZOQHlt5J7hP8XxYZdEIYaWIduuVq-xSYwFzg4l_xnkBff9ng14bB0USo0Y6sGJ4G259Bm1_83z5sJVC2g3XOPn10E_--t_oCuapSyMMxPKtGeRMorS_Az",
+        "expirationTime": null,
+        "keys": {
+          "p256dh": "BNJwIxkZp40Fdv6-eV7p7j7SCUumpU9-GkfLPlbEMlcVlwReX4NJa2roRc0VhPPnY9xo-rZpelhdaNKm3AJjbI0",
+          "auth": "Gv8uJPavF7gS8Qr7UPiPPw"
+        }
+      },
+      {
+        "endpoint": "https://fcm.googleapis.com/fcm/send/c3UHSBifvfk:APA91bESIZ2R5PRa6V9y4V0gwEWxs9euNNxv2Lzs-5-MlrvcBXm7hESx8Wh4vLDujV71Jxkko7tGtqTdrb00sIeevPLh5uuCpbRQqhBjgOnt_mZ4166dT6fWiwnyA4NjJnIvOecBni0m",
+        "expirationTime": null,
+        "keys": {
+          "p256dh": "BMKksVbsU0KaeCn9VLhX92Kc_Gkn0bJprI_uhJziKPUvaWBiNZiw3k96DbghGtSMAZBZICxR8LyMJ23T1yBkT4k",
+          "auth": "OTOO5xgxdi8rky4HcdpIgg"
+        }
+      },
+      {
+        "endpoint": "https://fcm.googleapis.com/fcm/send/cdr9RFVV50Q:APA91bF7y-Y8z_WBNLgsftYkcT_mRqKaR9lvnfSZMztWv7LZDxTcoHBXjPFENKYd4FkI4OrLbJrQt2OF9ZB00zC7DBOcfytpRaH8CWtAFnQ6M4VvRTKhPfIPXz9kIufZjwUm4ZmnGoW1",
+        "expirationTime": null,
+        "keys": {
+          "p256dh": "BH7Eg6BX5UGwYL44bUHXFTKKrfTwzB4SyVV-Y99yNHm6mBqkaO9lhiSoSDFapomoS9Cu81mSbIpmbmVEdGiokNE",
+          "auth": "3xmWNMKkPC2IOU61mtTwHg"
+        }
+      },
+      {
+        "endpoint": "https://fcm.googleapis.com/fcm/send/c66F0ywuuMw:APA91bFgSkOGnxpoMTuJadHMADLqvtK2r10NwWKZSrAJFZ8U5k4cvgOrh4-16MEJP953ZwmtLpwX_e_SEL6B8jIthZ6c5W2T4FdEw5BamTgqdRALE1ybl0CcOHs5EDQYKu3tXyT0BDJe",
+        "expirationTime": null,
+        "keys": {
+          "p256dh": "BKkrVrUjg6thC1cWi08UFFBza9iG2XWcbmnUGYu1oHUogXtdwqu_0uo9d9ewq_Jh8waNqjkDXDfBeQyxKj-RkWc",
+          "auth": "P2fKTYc6i_4ScO_J5rUacQ"
+        }
+      }
+    ],
+    "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+  },
+  {
+    "id": "mkhjiutl3",
+    "achievements": [],
+    "email": "demo@example.com",
+    "fullName": "Demo User",
+    "passwordHash": "$2b$10$nGvOqwySQwcLNTrikIhwXuhkAzOjBa6oXPWgIbp3Ctsod4dK2iFKS",
+    "preferences": {
+      "language": "en",
+      "currency": "USD",
+      "theme": "light",
+      "notifications": {
+        "pushEnabled": true,
+        "achievementEnabled": true,
+        "reminderDays": [
+          7,
+          3,
+          1,
+          0
+        ],
+        "quietHoursStart": "22:00",
+        "quietHoursEnd": "08:00",
+        "sound": "default",
+        "vibration": true,
+        "maxDaily": 5
+      }
+    },
+    "pushSubscriptions": []
+  },
+  {
+    "id": "35f0hduvj",
+    "achievements": [
+      "first-emi"
+    ],
+    "email": "sathyarekha@gmail.com",
+    "fullName": "Sathya Rekha",
+    "passwordHash": "$2b$10$TnNg/Ld8Md.O2XrzVttMQ.Z1MlGX7zaBfbgHQqDg5YJn0qfMoRvsi",
+    "preferences": {
+      "language": "en",
+      "currency": "INR",
+      "theme": "system",
+      "notifications": {
+        "pushEnabled": true,
+        "achievementEnabled": true,
+        "reminderDays": [
+          7,
+          3,
+          1,
+          0
+        ],
+        "quietHoursStart": "22:00",
+        "quietHoursEnd": "08:00",
+        "sound": "default",
+        "vibration": true,
+        "maxDaily": 5
+      }
+    },
+    "pushSubscriptions": [],
+    "avatarUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80"
   }
 ]

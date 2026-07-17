@@ -71,5 +71,10 @@
   "background_color": "#09090b",
   "theme_color": "#06b6d4",
   "display": "standalone",
-  "orientation": "portrait-primary"
+  "display_override": [
+    "standalone",
+    "window-controls-overlay",
+    "minimal-ui"
+  ],
+  "orientation": "portrait"
 }

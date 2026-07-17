@@ -1,6 +1,0 @@
-{
-  "name": "EMI & Loan Tracker",
-  "description": "A modern, responsive EMI and Loan Tracker with offline PWA support, automatic amortization scheduling, payments tracking, and beautiful Recharts visual analytics.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

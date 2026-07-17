@@ -20,6 +20,8 @@ export default function PWAPrompt({
   const [activeTab, setActiveTab] = useState<'ios' | 'android' | 'desktop'>('android');
   const [dismissed, setDismissed] = useState(false);
 
+  const isInIframe = typeof window !== 'undefined' && window.self !== window.top;
+
   // Auto-detect OS on mount
   useEffect(() => {
     // Check local storage if user dismissed the prompt for this week
@@ -121,130 +123,163 @@ export default function PWAPrompt({
               Install the **EMI Progress Tracker** on your device to enjoy offline calculation access, zero loading times, and full fullscreen utility views.
             </p>
 
-            {/* TAB SELECTOR */}
-            <div className="grid grid-cols-3 gap-1 bg-zinc-950 p-1 rounded-lg border border-zinc-850">
-              <button
-                id="pwa_tab_android"
-                onClick={() => setActiveTab('android')}
-                className={`py-1.5 rounded-md text-[10px] font-black tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                  activeTab === 'android'
-                    ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
-                    : 'text-zinc-500 hover:text-zinc-300'
-                }`}
-              >
-                <Smartphone className="w-3.5 h-3.5" />
-                Android
-              </button>
-              <button
-                id="pwa_tab_ios"
-                onClick={() => setActiveTab('ios')}
-                className={`py-1.5 rounded-md text-[10px] font-black tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                  activeTab === 'ios'
-                    ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
-                    : 'text-zinc-500 hover:text-zinc-300'
-                }`}
-              >
-                <Smartphone className="w-3.5 h-3.5" />
-                iOS (Apple)
-              </button>
-              <button
-                id="pwa_tab_desktop"
-                onClick={() => setActiveTab('desktop')}
-                className={`py-1.5 rounded-md text-[10px] font-black tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-1 ${
-                  activeTab === 'desktop'
-                    ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
-                    : 'text-zinc-500 hover:text-zinc-300'
-                }`}
-              >
-                <Laptop className="w-3.5 h-3.5" />
-                Desktop
-              </button>
-            </div>
-
-            {/* DEVICE SPECIFIC INSTRUCTIONS */}
-            <div className="bg-zinc-950 border border-zinc-850/70 rounded-xl p-3.5 min-h-[140px] flex flex-col justify-between">
-              
-              {/* ANDROID TAB */}
-              {activeTab === 'android' && (
-                <div className="space-y-3">
-                  {deferredPrompt ? (
-                    <div className="text-center py-2 space-y-3">
-                      <p className="text-xs text-zinc-300 font-semibold">Your browser is fully compatible!</p>
-                      <button
-                        id="pwa_install_prompt_btn_android"
-                        onClick={onInstallApp}
-                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-black bg-cyan-500 hover:bg-cyan-600 text-zinc-950 transition-all cursor-pointer shadow-md shadow-cyan-500/20"
-                      >
-                        <Download className="w-4 h-4" />
-                        Install App Instantly
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">Manual Android Instructions</span>
-                      <ol className="text-xs text-zinc-400 space-y-2 list-decimal list-inside pl-1">
-                        <li>Tap Chrome's menu button <span className="text-zinc-200 font-bold">⋮</span> in the top-right.</li>
-                        <li>Select <span className="text-cyan-400 font-bold">"Install app"</span> or <span className="text-zinc-200 font-bold">"Add to Home screen"</span>.</li>
-                        <li>Follow the screen confirmation to launch standalone.</li>
-                      </ol>
-                    </div>
-                  )}
+            {/* TAB SELECTOR OR IFRAME NOTICE */}
+            {isInIframe ? (
+              <div className="space-y-4">
+                <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 space-y-2">
+                  <h4 className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    Preview Container Detected
+                  </h4>
+                  <p className="text-[11px] text-zinc-300 leading-normal">
+                    Browser security policies strictly disable native PWA standalone installation inside nested iframes (such as the AI Studio preview window).
+                  </p>
+                  <p className="text-[11px] text-zinc-400 leading-normal">
+                    To install this app on your phone, tablet, or desktop as a standalone application, you must launch it in a normal, independent browser tab.
+                  </p>
                 </div>
-              )}
+                
+                <a
+                  href={window.location.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black bg-cyan-500 hover:bg-cyan-600 text-zinc-950 transition-all cursor-pointer shadow-md shadow-cyan-500/20 text-center"
+                >
+                  <Download className="w-4 h-4" />
+                  Open App in New Tab to Install
+                </a>
 
-              {/* IOS TAB */}
-              {activeTab === 'ios' && (
-                <div className="space-y-2">
-                  <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">Apple Safari Instructions</span>
-                  <ul className="text-xs text-zinc-400 space-y-2">
-                    <li className="flex items-start gap-2">
-                      <span className="bg-zinc-800 text-zinc-300 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black mt-0.5">1</span>
-                      <span>Tap the browser <span className="text-cyan-400 font-semibold">Share</span> button <Share className="w-3.5 h-3.5 inline mx-1 text-cyan-400" /> at the bottom of the Safari screen.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="bg-zinc-800 text-zinc-300 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black mt-0.5">2</span>
-                      <span>Scroll down and select <span className="text-cyan-400 font-semibold">Add to Home Screen</span> <PlusSquare className="w-3.5 h-3.5 inline mx-1 text-cyan-400" />.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="bg-zinc-800 text-zinc-300 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black mt-0.5">3</span>
-                      <span>Click <span className="text-zinc-200 font-semibold">Add</span> in the top-right corner to complete!</span>
-                    </li>
-                  </ul>
+                <div className="border-t border-zinc-900/60 pt-2.5 mt-2 flex items-center justify-center gap-1.5 text-[9px] text-zinc-500 font-bold uppercase">
+                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-500/80" /> Safe, Secure & fully offline enabled
                 </div>
-              )}
-
-              {/* DESKTOP TAB */}
-              {activeTab === 'desktop' && (
-                <div className="space-y-3">
-                  {deferredPrompt ? (
-                    <div className="text-center py-2 space-y-3">
-                      <p className="text-xs text-zinc-300 font-semibold">Ready to install on this computer!</p>
-                      <button
-                        id="pwa_install_prompt_btn_desktop"
-                        onClick={onInstallApp}
-                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-black bg-cyan-500 hover:bg-cyan-600 text-zinc-950 transition-all cursor-pointer shadow-md shadow-cyan-500/20"
-                      >
-                        <Download className="w-4 h-4" />
-                        Install Standalone Desktop App
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">Chrome / Edge Instructions</span>
-                      <ol className="text-xs text-zinc-400 space-y-2 list-decimal list-inside pl-1">
-                        <li>Look at the right-side of your <span className="text-zinc-200 font-semibold">Chrome address bar</span>.</li>
-                        <li>Click the <span className="text-cyan-400 font-bold">Install</span> icon (a screen with down-arrow) or menu <span className="text-zinc-200 font-bold">⋮</span>.</li>
-                        <li>Select <span className="text-cyan-400 font-semibold">"Install EMI Tracker"</span> for desktop view.</li>
-                      </ol>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="border-t border-zinc-900/60 pt-2.5 mt-2 flex items-center gap-1.5 text-[9px] text-zinc-500 font-bold uppercase">
-                <ShieldCheck className="w-3.5 h-3.5 text-cyan-500/80" /> Safe, Secure & fully offline enabled
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-3 gap-1 bg-zinc-950 p-1 rounded-lg border border-zinc-850">
+                  <button
+                    id="pwa_tab_android"
+                    onClick={() => setActiveTab('android')}
+                    className={`py-1.5 rounded-md text-[10px] font-black tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                      activeTab === 'android'
+                        ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                  >
+                    <Smartphone className="w-3.5 h-3.5" />
+                    Android
+                  </button>
+                  <button
+                    id="pwa_tab_ios"
+                    onClick={() => setActiveTab('ios')}
+                    className={`py-1.5 rounded-md text-[10px] font-black tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                      activeTab === 'ios'
+                        ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                  >
+                    <Smartphone className="w-3.5 h-3.5" />
+                    iOS (Apple)
+                  </button>
+                  <button
+                    id="pwa_tab_desktop"
+                    onClick={() => setActiveTab('desktop')}
+                    className={`py-1.5 rounded-md text-[10px] font-black tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                      activeTab === 'desktop'
+                        ? 'bg-zinc-800 text-cyan-400 border border-zinc-700/50'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                  >
+                    <Laptop className="w-3.5 h-3.5" />
+                    Desktop
+                  </button>
+                </div>
+
+                {/* DEVICE SPECIFIC INSTRUCTIONS */}
+                <div className="bg-zinc-950 border border-zinc-850/70 rounded-xl p-3.5 min-h-[140px] flex flex-col justify-between">
+                  
+                  {/* ANDROID TAB */}
+                  {activeTab === 'android' && (
+                    <div className="space-y-3">
+                      {deferredPrompt ? (
+                        <div className="text-center py-2 space-y-3">
+                          <p className="text-xs text-zinc-300 font-semibold">Your browser is fully compatible!</p>
+                          <button
+                            id="pwa_install_prompt_btn_android"
+                            onClick={onInstallApp}
+                            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-black bg-cyan-500 hover:bg-cyan-600 text-zinc-950 transition-all cursor-pointer shadow-md shadow-cyan-500/20"
+                          >
+                            <Download className="w-4 h-4" />
+                            Install App Instantly
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">Manual Android Instructions</span>
+                          <ol className="text-xs text-zinc-400 space-y-2 list-decimal list-inside pl-1">
+                            <li>Tap Chrome's menu button <span className="text-zinc-200 font-bold">⋮</span> in the top-right.</li>
+                            <li>Select <span className="text-cyan-400 font-bold">"Install app"</span> or <span className="text-zinc-200 font-bold">"Add to Home screen"</span>.</li>
+                            <li>Follow the screen confirmation to launch standalone.</li>
+                          </ol>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* IOS TAB */}
+                  {activeTab === 'ios' && (
+                    <div className="space-y-2">
+                      <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">Apple Safari Instructions</span>
+                      <ul className="text-xs text-zinc-400 space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="bg-zinc-800 text-zinc-300 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black mt-0.5">1</span>
+                          <span>Tap the browser <span className="text-cyan-400 font-semibold">Share</span> button <Share className="w-3.5 h-3.5 inline mx-1 text-cyan-400" /> at the bottom of the Safari screen.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-zinc-800 text-zinc-300 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black mt-0.5">2</span>
+                          <span>Scroll down and select <span className="text-cyan-400 font-semibold">Add to Home Screen</span> <PlusSquare className="w-3.5 h-3.5 inline mx-1 text-cyan-400" />.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-zinc-800 text-zinc-300 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black mt-0.5">3</span>
+                          <span>Click <span className="text-zinc-200 font-semibold">Add</span> in the top-right corner to complete!</span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* DESKTOP TAB */}
+                  {activeTab === 'desktop' && (
+                    <div className="space-y-3">
+                      {deferredPrompt ? (
+                        <div className="text-center py-2 space-y-3">
+                          <p className="text-xs text-zinc-300 font-semibold">Ready to install on this computer!</p>
+                          <button
+                            id="pwa_install_prompt_btn_desktop"
+                            onClick={onInstallApp}
+                            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-black bg-cyan-500 hover:bg-cyan-600 text-zinc-950 transition-all cursor-pointer shadow-md shadow-cyan-500/20"
+                          >
+                            <Download className="w-4 h-4" />
+                            Install Standalone Desktop App
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">Chrome / Edge Instructions</span>
+                          <ol className="text-xs text-zinc-400 space-y-2 list-decimal list-inside pl-1">
+                            <li>Look at the right-side of your <span className="text-zinc-200 font-semibold">Chrome address bar</span>.</li>
+                            <li>Click the <span className="text-cyan-400 font-bold">Install</span> icon (a screen with down-arrow) or menu <span className="text-zinc-200 font-bold">⋮</span>.</li>
+                            <li>Select <span className="text-cyan-400 font-semibold">"Install EMI Tracker"</span> for desktop view.</li>
+                          </ol>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="border-t border-zinc-900/60 pt-2.5 mt-2 flex items-center gap-1.5 text-[9px] text-zinc-500 font-bold uppercase">
+                    <ShieldCheck className="w-3.5 h-3.5 text-cyan-500/80" /> Safe, Secure & fully offline enabled
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* BUTTON BAR */}
             <div className="flex items-center justify-between pt-1">

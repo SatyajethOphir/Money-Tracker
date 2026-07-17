@@ -472,6 +472,11 @@ export default function SettingsTab({
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                       ✓ Installed (Running Standalone App)
                     </span>
+                  ) : (typeof window !== 'undefined' && window.self !== window.top) ? (
+                    <span className="text-[10px] text-amber-400 font-bold flex items-center gap-1 mt-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                      Preview Iframe (Installation Disabled)
+                    </span>
                   ) : deferredPrompt ? (
                     <span className="text-[10px] text-cyan-400 font-bold flex items-center gap-1 mt-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-bounce"></span>
@@ -484,7 +489,16 @@ export default function SettingsTab({
                   )}
                 </div>
                 
-                {deferredPrompt && onInstallApp && !(window.matchMedia('(display-mode: standalone)').matches || isInstalled) && (
+                {(typeof window !== 'undefined' && window.self !== window.top) ? (
+                  <a
+                    href={window.location.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full md:w-auto px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-zinc-950 transition-all shadow-md shadow-cyan-500/10 cursor-pointer text-center"
+                  >
+                    Open in New Tab to Install
+                  </a>
+                ) : deferredPrompt && onInstallApp && !(window.matchMedia('(display-mode: standalone)').matches || isInstalled) && (
                   <button
                     type="button"
                     onClick={onInstallApp}
@@ -494,6 +508,19 @@ export default function SettingsTab({
                   </button>
                 )}
               </div>
+
+              {(typeof window !== 'undefined' && window.self !== window.top) && !(window.matchMedia('(display-mode: standalone)').matches || isInstalled) && (
+                <div className="bg-amber-500/5 border border-amber-500/25 rounded-2xl p-4 mt-2">
+                  <div className="flex items-center gap-2 text-amber-400 font-bold text-xs mb-1">
+                    <Smartphone className="w-4 h-4" />
+                    Preview Environment Notice
+                  </div>
+                  <p className="text-[11px] text-zinc-400 leading-relaxed">
+                    Browser security policies strictly block native PWA standalone installation inside nested iframes (such as the AI Studio preview window).
+                    Please click the <strong>"Open in New Tab to Install"</strong> button to open the application independently. The native install prompt and button will immediately work there!
+                  </p>
+                </div>
+              )}
 
               {!(window.matchMedia('(display-mode: standalone)').matches || isInstalled) && (
                 <div className="bg-zinc-950/40 border border-zinc-800/50 rounded-2xl p-4 mt-2 space-y-3">

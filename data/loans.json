@@ -343,7 +343,8 @@
         "status": "Extra",
         "notes": "Extra payment applied to principal"
       }
-    ]
+    ],
+    "sharing": null
   },
   {
     "id": "seed-personal-loan",
@@ -477,7 +478,8 @@
         "status": "Paid",
         "notes": "May installment"
       }
-    ]
+    ],
+    "sharing": null
   },
   {
     "id": "welcome-hx0fxgwey",
@@ -612,6 +614,1023 @@
     "totalPaid": 436.14,
     "totalRepayment": 5233.19,
     "type": "Reducing",
-    "userId": "hx0fxgwey"
+    "userId": "hx0fxgwey",
+    "sharing": null
+  },
+  {
+    "id": "jsyc8k56f",
+    "amortizationSchedule": [
+      {
+        "month": 1,
+        "dueDate": "2026-06-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 24500.75,
+        "interestPortion": 15000,
+        "remainingBalance": 1475499.25
+      },
+      {
+        "month": 2,
+        "dueDate": "2026-07-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 24745.76,
+        "interestPortion": 14754.99,
+        "remainingBalance": 1450753.49
+      },
+      {
+        "month": 3,
+        "dueDate": "2026-08-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 24993.22,
+        "interestPortion": 14507.53,
+        "remainingBalance": 1425760.27
+      },
+      {
+        "month": 4,
+        "dueDate": "2026-09-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 25243.15,
+        "interestPortion": 14257.6,
+        "remainingBalance": 1400517.12
+      },
+      {
+        "month": 5,
+        "dueDate": "2026-10-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 25495.58,
+        "interestPortion": 14005.17,
+        "remainingBalance": 1375021.54
+      },
+      {
+        "month": 6,
+        "dueDate": "2026-11-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 25750.54,
+        "interestPortion": 13750.22,
+        "remainingBalance": 1349271
+      },
+      {
+        "month": 7,
+        "dueDate": "2026-12-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 26008.04,
+        "interestPortion": 13492.71,
+        "remainingBalance": 1323262.95
+      },
+      {
+        "month": 8,
+        "dueDate": "2027-01-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 26268.12,
+        "interestPortion": 13232.63,
+        "remainingBalance": 1296994.83
+      },
+      {
+        "month": 9,
+        "dueDate": "2027-02-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 26530.8,
+        "interestPortion": 12969.95,
+        "remainingBalance": 1270464.03
+      },
+      {
+        "month": 10,
+        "dueDate": "2027-03-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 26796.11,
+        "interestPortion": 12704.64,
+        "remainingBalance": 1243667.91
+      },
+      {
+        "month": 11,
+        "dueDate": "2027-04-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 27064.07,
+        "interestPortion": 12436.68,
+        "remainingBalance": 1216603.84
+      },
+      {
+        "month": 12,
+        "dueDate": "2027-05-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 27334.71,
+        "interestPortion": 12166.04,
+        "remainingBalance": 1189269.12
+      },
+      {
+        "month": 13,
+        "dueDate": "2027-06-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 27608.06,
+        "interestPortion": 11892.69,
+        "remainingBalance": 1161661.06
+      },
+      {
+        "month": 14,
+        "dueDate": "2027-07-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 27884.14,
+        "interestPortion": 11616.61,
+        "remainingBalance": 1133776.92
+      },
+      {
+        "month": 15,
+        "dueDate": "2027-08-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 28162.98,
+        "interestPortion": 11337.77,
+        "remainingBalance": 1105613.94
+      },
+      {
+        "month": 16,
+        "dueDate": "2027-09-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 28444.61,
+        "interestPortion": 11056.14,
+        "remainingBalance": 1077169.32
+      },
+      {
+        "month": 17,
+        "dueDate": "2027-10-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 28729.06,
+        "interestPortion": 10771.69,
+        "remainingBalance": 1048440.26
+      },
+      {
+        "month": 18,
+        "dueDate": "2027-11-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 29016.35,
+        "interestPortion": 10484.4,
+        "remainingBalance": 1019423.91
+      },
+      {
+        "month": 19,
+        "dueDate": "2027-12-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 29306.51,
+        "interestPortion": 10194.24,
+        "remainingBalance": 990117.4
+      },
+      {
+        "month": 20,
+        "dueDate": "2028-01-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 29599.58,
+        "interestPortion": 9901.17,
+        "remainingBalance": 960517.82
+      },
+      {
+        "month": 21,
+        "dueDate": "2028-02-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 29895.57,
+        "interestPortion": 9605.18,
+        "remainingBalance": 930622.24
+      },
+      {
+        "month": 22,
+        "dueDate": "2028-03-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 30194.53,
+        "interestPortion": 9306.22,
+        "remainingBalance": 900427.71
+      },
+      {
+        "month": 23,
+        "dueDate": "2028-04-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 30496.48,
+        "interestPortion": 9004.28,
+        "remainingBalance": 869931.24
+      },
+      {
+        "month": 24,
+        "dueDate": "2028-05-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 30801.44,
+        "interestPortion": 8699.31,
+        "remainingBalance": 839129.8
+      },
+      {
+        "month": 25,
+        "dueDate": "2028-06-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 31109.46,
+        "interestPortion": 8391.3,
+        "remainingBalance": 808020.34
+      },
+      {
+        "month": 26,
+        "dueDate": "2028-07-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 31420.55,
+        "interestPortion": 8080.2,
+        "remainingBalance": 776599.79
+      },
+      {
+        "month": 27,
+        "dueDate": "2028-08-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 31734.76,
+        "interestPortion": 7766,
+        "remainingBalance": 744865.04
+      },
+      {
+        "month": 28,
+        "dueDate": "2028-09-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 32052.1,
+        "interestPortion": 7448.65,
+        "remainingBalance": 712812.93
+      },
+      {
+        "month": 29,
+        "dueDate": "2028-10-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 32372.62,
+        "interestPortion": 7128.13,
+        "remainingBalance": 680440.31
+      },
+      {
+        "month": 30,
+        "dueDate": "2028-11-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 32696.35,
+        "interestPortion": 6804.4,
+        "remainingBalance": 647743.96
+      },
+      {
+        "month": 31,
+        "dueDate": "2028-12-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 33023.31,
+        "interestPortion": 6477.44,
+        "remainingBalance": 614720.65
+      },
+      {
+        "month": 32,
+        "dueDate": "2029-01-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 33353.55,
+        "interestPortion": 6147.21,
+        "remainingBalance": 581367.1
+      },
+      {
+        "month": 33,
+        "dueDate": "2029-02-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 33687.08,
+        "interestPortion": 5813.67,
+        "remainingBalance": 547680.02
+      },
+      {
+        "month": 34,
+        "dueDate": "2029-03-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 34023.95,
+        "interestPortion": 5476.8,
+        "remainingBalance": 513656.06
+      },
+      {
+        "month": 35,
+        "dueDate": "2029-04-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 34364.19,
+        "interestPortion": 5136.56,
+        "remainingBalance": 479291.87
+      },
+      {
+        "month": 36,
+        "dueDate": "2029-05-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 34707.83,
+        "interestPortion": 4792.92,
+        "remainingBalance": 444584.04
+      },
+      {
+        "month": 37,
+        "dueDate": "2029-06-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 35054.91,
+        "interestPortion": 4445.84,
+        "remainingBalance": 409529.12
+      },
+      {
+        "month": 38,
+        "dueDate": "2029-07-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 35405.46,
+        "interestPortion": 4095.29,
+        "remainingBalance": 374123.66
+      },
+      {
+        "month": 39,
+        "dueDate": "2029-08-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 35759.52,
+        "interestPortion": 3741.24,
+        "remainingBalance": 338364.15
+      },
+      {
+        "month": 40,
+        "dueDate": "2029-09-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 36117.11,
+        "interestPortion": 3383.64,
+        "remainingBalance": 302247.03
+      },
+      {
+        "month": 41,
+        "dueDate": "2029-10-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 36478.28,
+        "interestPortion": 3022.47,
+        "remainingBalance": 265768.75
+      },
+      {
+        "month": 42,
+        "dueDate": "2029-11-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 36843.07,
+        "interestPortion": 2657.69,
+        "remainingBalance": 228925.69
+      },
+      {
+        "month": 43,
+        "dueDate": "2029-12-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 37211.5,
+        "interestPortion": 2289.26,
+        "remainingBalance": 191714.19
+      },
+      {
+        "month": 44,
+        "dueDate": "2030-01-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 37583.61,
+        "interestPortion": 1917.14,
+        "remainingBalance": 154130.58
+      },
+      {
+        "month": 45,
+        "dueDate": "2030-02-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 37959.45,
+        "interestPortion": 1541.31,
+        "remainingBalance": 116171.13
+      },
+      {
+        "month": 46,
+        "dueDate": "2030-03-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 38339.04,
+        "interestPortion": 1161.71,
+        "remainingBalance": 77832.09
+      },
+      {
+        "month": 47,
+        "dueDate": "2030-04-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 38722.43,
+        "interestPortion": 778.32,
+        "remainingBalance": 39109.66
+      },
+      {
+        "month": 48,
+        "dueDate": "2030-05-10",
+        "emi": 39500.75314789163,
+        "principalPortion": 39109.66,
+        "interestPortion": 391.1,
+        "remainingBalance": 0
+      }
+    ],
+    "completionPercentage": 0,
+    "duration": 48,
+    "durationUnit": "Months",
+    "emi": 39500.75,
+    "interestPaid": 0,
+    "lenderName": "PEOPLES Bank",
+    "loanName": "LOAN",
+    "nextEmiDate": "2026-06-10",
+    "payments": [],
+    "paymentsMadeCount": 0,
+    "paymentsRemainingCount": 48,
+    "principal": 1500000,
+    "principalPaid": 0,
+    "rate": 12,
+    "remainingInterest": 396036.15,
+    "remainingPrincipal": 1500000,
+    "startDate": "2026-05-10",
+    "status": "Active",
+    "totalInterest": 396036.15,
+    "totalPaid": 0,
+    "totalRepayment": 1896036.15,
+    "type": "Reducing",
+    "userId": "45ap7cwd6",
+    "sharing": {
+      "enabled": true,
+      "token": "4463e53ed45911bd",
+      "privacy": {
+        "showLoanAmount": true,
+        "showInterestRate": true,
+        "showEmi": true,
+        "showPaymentHistory": true,
+        "showCharts": true,
+        "showNotes": true,
+        "showRemainingBalance": true,
+        "showNextEmiDate": true
+      },
+      "expirationType": "24h",
+      "expirationDate": "2026-07-18T16:00:04.063Z",
+      "passwordHash": null,
+      "passwordProtected": false,
+      "logs": [
+        {
+          "action": "created",
+          "timestamp": "2026-07-17T15:59:43.563Z",
+          "ip": "127.0.0.1"
+        },
+        {
+          "action": "regenerated",
+          "timestamp": "2026-07-17T16:00:04.063Z",
+          "ip": "127.0.0.1"
+        },
+        {
+          "action": "accessed",
+          "timestamp": "2026-07-17T16:00:28.590Z",
+          "ip": "127.0.0.1"
+        },
+        {
+          "action": "accessed",
+          "timestamp": "2026-07-17T16:10:50.875Z",
+          "ip": "127.0.0.1"
+        },
+        {
+          "action": "accessed",
+          "timestamp": "2026-07-17T16:11:52.921Z",
+          "ip": "127.0.0.1"
+        },
+        {
+          "action": "accessed",
+          "timestamp": "2026-07-17T16:12:19.506Z",
+          "ip": "127.0.0.1"
+        },
+        {
+          "action": "accessed",
+          "timestamp": "2026-07-17T16:12:35.216Z",
+          "ip": "127.0.0.1"
+        }
+      ]
+    }
+  },
+  {
+    "id": "welcome-mkhjiutl3",
+    "amortizationSchedule": [
+      {
+        "month": 1,
+        "dueDate": "2026-07-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 400.68,
+        "interestPortion": 35.42,
+        "remainingBalance": 4599.32
+      },
+      {
+        "month": 2,
+        "dueDate": "2026-08-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 403.52,
+        "interestPortion": 32.58,
+        "remainingBalance": 4195.8
+      },
+      {
+        "month": 3,
+        "dueDate": "2026-09-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 406.38,
+        "interestPortion": 29.72,
+        "remainingBalance": 3789.42
+      },
+      {
+        "month": 4,
+        "dueDate": "2026-10-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 409.26,
+        "interestPortion": 26.84,
+        "remainingBalance": 3380.16
+      },
+      {
+        "month": 5,
+        "dueDate": "2026-11-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 412.16,
+        "interestPortion": 23.94,
+        "remainingBalance": 2968.01
+      },
+      {
+        "month": 6,
+        "dueDate": "2026-12-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 415.08,
+        "interestPortion": 21.02,
+        "remainingBalance": 2552.93
+      },
+      {
+        "month": 7,
+        "dueDate": "2027-01-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 418.02,
+        "interestPortion": 18.08,
+        "remainingBalance": 2134.91
+      },
+      {
+        "month": 8,
+        "dueDate": "2027-02-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 420.98,
+        "interestPortion": 15.12,
+        "remainingBalance": 1713.94
+      },
+      {
+        "month": 9,
+        "dueDate": "2027-03-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 423.96,
+        "interestPortion": 12.14,
+        "remainingBalance": 1289.98
+      },
+      {
+        "month": 10,
+        "dueDate": "2027-04-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 426.96,
+        "interestPortion": 9.14,
+        "remainingBalance": 863.02
+      },
+      {
+        "month": 11,
+        "dueDate": "2027-05-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 429.99,
+        "interestPortion": 6.11,
+        "remainingBalance": 433.03
+      },
+      {
+        "month": 12,
+        "dueDate": "2027-06-16",
+        "emi": 436.0989123004639,
+        "principalPortion": 433.03,
+        "interestPortion": 3.07,
+        "remainingBalance": 0
+      }
+    ],
+    "completionPercentage": 8.01,
+    "duration": 12,
+    "durationUnit": "Months",
+    "emi": 436.1,
+    "interestPaid": 35.42,
+    "lenderName": "Apex Capital",
+    "loanName": "Personal Welcome Loan",
+    "nextEmiDate": "2026-08-16",
+    "payments": [
+      {
+        "id": "welcome-pay-1",
+        "paymentDate": "2026-07-01",
+        "amountPaid": 436.14,
+        "principalPortion": 400.72,
+        "interestPortion": 35.42,
+        "remainingBalance": 4797.05,
+        "status": "Paid",
+        "notes": "Welcome installment"
+      }
+    ],
+    "paymentsMadeCount": 1,
+    "paymentsRemainingCount": 11,
+    "principal": 5000,
+    "principalPaid": 400.72,
+    "rate": 8.5,
+    "remainingInterest": 197.77,
+    "remainingPrincipal": 4599.28,
+    "startDate": "2026-06-16",
+    "status": "Active",
+    "totalInterest": 233.19,
+    "totalPaid": 436.14,
+    "totalRepayment": 5233.19,
+    "type": "Reducing",
+    "userId": "mkhjiutl3",
+    "sharing": null
+  },
+  {
+    "id": "id3tln7kb",
+    "amortizationSchedule": [
+      {
+        "month": 1,
+        "dueDate": "2026-08-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 24500.75,
+        "interestPortion": 15000,
+        "remainingBalance": 1475499.25
+      },
+      {
+        "month": 2,
+        "dueDate": "2026-09-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 24745.76,
+        "interestPortion": 14754.99,
+        "remainingBalance": 1450753.49
+      },
+      {
+        "month": 3,
+        "dueDate": "2026-10-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 24993.22,
+        "interestPortion": 14507.53,
+        "remainingBalance": 1425760.27
+      },
+      {
+        "month": 4,
+        "dueDate": "2026-11-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 25243.15,
+        "interestPortion": 14257.6,
+        "remainingBalance": 1400517.12
+      },
+      {
+        "month": 5,
+        "dueDate": "2026-12-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 25495.58,
+        "interestPortion": 14005.17,
+        "remainingBalance": 1375021.54
+      },
+      {
+        "month": 6,
+        "dueDate": "2027-01-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 25750.54,
+        "interestPortion": 13750.22,
+        "remainingBalance": 1349271
+      },
+      {
+        "month": 7,
+        "dueDate": "2027-02-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 26008.04,
+        "interestPortion": 13492.71,
+        "remainingBalance": 1323262.95
+      },
+      {
+        "month": 8,
+        "dueDate": "2027-03-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 26268.12,
+        "interestPortion": 13232.63,
+        "remainingBalance": 1296994.83
+      },
+      {
+        "month": 9,
+        "dueDate": "2027-04-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 26530.8,
+        "interestPortion": 12969.95,
+        "remainingBalance": 1270464.03
+      },
+      {
+        "month": 10,
+        "dueDate": "2027-05-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 26796.11,
+        "interestPortion": 12704.64,
+        "remainingBalance": 1243667.91
+      },
+      {
+        "month": 11,
+        "dueDate": "2027-06-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 27064.07,
+        "interestPortion": 12436.68,
+        "remainingBalance": 1216603.84
+      },
+      {
+        "month": 12,
+        "dueDate": "2027-07-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 27334.71,
+        "interestPortion": 12166.04,
+        "remainingBalance": 1189269.12
+      },
+      {
+        "month": 13,
+        "dueDate": "2027-08-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 27608.06,
+        "interestPortion": 11892.69,
+        "remainingBalance": 1161661.06
+      },
+      {
+        "month": 14,
+        "dueDate": "2027-09-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 27884.14,
+        "interestPortion": 11616.61,
+        "remainingBalance": 1133776.92
+      },
+      {
+        "month": 15,
+        "dueDate": "2027-10-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 28162.98,
+        "interestPortion": 11337.77,
+        "remainingBalance": 1105613.94
+      },
+      {
+        "month": 16,
+        "dueDate": "2027-11-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 28444.61,
+        "interestPortion": 11056.14,
+        "remainingBalance": 1077169.32
+      },
+      {
+        "month": 17,
+        "dueDate": "2027-12-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 28729.06,
+        "interestPortion": 10771.69,
+        "remainingBalance": 1048440.26
+      },
+      {
+        "month": 18,
+        "dueDate": "2028-01-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 29016.35,
+        "interestPortion": 10484.4,
+        "remainingBalance": 1019423.91
+      },
+      {
+        "month": 19,
+        "dueDate": "2028-02-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 29306.51,
+        "interestPortion": 10194.24,
+        "remainingBalance": 990117.4
+      },
+      {
+        "month": 20,
+        "dueDate": "2028-03-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 29599.58,
+        "interestPortion": 9901.17,
+        "remainingBalance": 960517.82
+      },
+      {
+        "month": 21,
+        "dueDate": "2028-04-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 29895.57,
+        "interestPortion": 9605.18,
+        "remainingBalance": 930622.24
+      },
+      {
+        "month": 22,
+        "dueDate": "2028-05-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 30194.53,
+        "interestPortion": 9306.22,
+        "remainingBalance": 900427.71
+      },
+      {
+        "month": 23,
+        "dueDate": "2028-06-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 30496.48,
+        "interestPortion": 9004.28,
+        "remainingBalance": 869931.24
+      },
+      {
+        "month": 24,
+        "dueDate": "2028-07-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 30801.44,
+        "interestPortion": 8699.31,
+        "remainingBalance": 839129.8
+      },
+      {
+        "month": 25,
+        "dueDate": "2028-08-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 31109.46,
+        "interestPortion": 8391.3,
+        "remainingBalance": 808020.34
+      },
+      {
+        "month": 26,
+        "dueDate": "2028-09-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 31420.55,
+        "interestPortion": 8080.2,
+        "remainingBalance": 776599.79
+      },
+      {
+        "month": 27,
+        "dueDate": "2028-10-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 31734.76,
+        "interestPortion": 7766,
+        "remainingBalance": 744865.04
+      },
+      {
+        "month": 28,
+        "dueDate": "2028-11-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 32052.1,
+        "interestPortion": 7448.65,
+        "remainingBalance": 712812.93
+      },
+      {
+        "month": 29,
+        "dueDate": "2028-12-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 32372.62,
+        "interestPortion": 7128.13,
+        "remainingBalance": 680440.31
+      },
+      {
+        "month": 30,
+        "dueDate": "2029-01-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 32696.35,
+        "interestPortion": 6804.4,
+        "remainingBalance": 647743.96
+      },
+      {
+        "month": 31,
+        "dueDate": "2029-02-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 33023.31,
+        "interestPortion": 6477.44,
+        "remainingBalance": 614720.65
+      },
+      {
+        "month": 32,
+        "dueDate": "2029-03-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 33353.55,
+        "interestPortion": 6147.21,
+        "remainingBalance": 581367.1
+      },
+      {
+        "month": 33,
+        "dueDate": "2029-04-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 33687.08,
+        "interestPortion": 5813.67,
+        "remainingBalance": 547680.02
+      },
+      {
+        "month": 34,
+        "dueDate": "2029-05-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 34023.95,
+        "interestPortion": 5476.8,
+        "remainingBalance": 513656.06
+      },
+      {
+        "month": 35,
+        "dueDate": "2029-06-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 34364.19,
+        "interestPortion": 5136.56,
+        "remainingBalance": 479291.87
+      },
+      {
+        "month": 36,
+        "dueDate": "2029-07-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 34707.83,
+        "interestPortion": 4792.92,
+        "remainingBalance": 444584.04
+      },
+      {
+        "month": 37,
+        "dueDate": "2029-08-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 35054.91,
+        "interestPortion": 4445.84,
+        "remainingBalance": 409529.12
+      },
+      {
+        "month": 38,
+        "dueDate": "2029-09-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 35405.46,
+        "interestPortion": 4095.29,
+        "remainingBalance": 374123.66
+      },
+      {
+        "month": 39,
+        "dueDate": "2029-10-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 35759.52,
+        "interestPortion": 3741.24,
+        "remainingBalance": 338364.15
+      },
+      {
+        "month": 40,
+        "dueDate": "2029-11-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 36117.11,
+        "interestPortion": 3383.64,
+        "remainingBalance": 302247.03
+      },
+      {
+        "month": 41,
+        "dueDate": "2029-12-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 36478.28,
+        "interestPortion": 3022.47,
+        "remainingBalance": 265768.75
+      },
+      {
+        "month": 42,
+        "dueDate": "2030-01-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 36843.07,
+        "interestPortion": 2657.69,
+        "remainingBalance": 228925.69
+      },
+      {
+        "month": 43,
+        "dueDate": "2030-02-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 37211.5,
+        "interestPortion": 2289.26,
+        "remainingBalance": 191714.19
+      },
+      {
+        "month": 44,
+        "dueDate": "2030-03-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 37583.61,
+        "interestPortion": 1917.14,
+        "remainingBalance": 154130.58
+      },
+      {
+        "month": 45,
+        "dueDate": "2030-04-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 37959.45,
+        "interestPortion": 1541.31,
+        "remainingBalance": 116171.13
+      },
+      {
+        "month": 46,
+        "dueDate": "2030-05-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 38339.04,
+        "interestPortion": 1161.71,
+        "remainingBalance": 77832.09
+      },
+      {
+        "month": 47,
+        "dueDate": "2030-06-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 38722.43,
+        "interestPortion": 778.32,
+        "remainingBalance": 39109.66
+      },
+      {
+        "month": 48,
+        "dueDate": "2030-07-14",
+        "emi": 39500.75314789163,
+        "principalPortion": 39109.66,
+        "interestPortion": 391.1,
+        "remainingBalance": 0
+      }
+    ],
+    "completionPercentage": 0,
+    "duration": 48,
+    "durationUnit": "Months",
+    "emi": 39500.75,
+    "interestPaid": 0,
+    "lenderName": "People",
+    "loanName": "Anna Loan ",
+    "nextEmiDate": "2026-08-14",
+    "payments": [],
+    "paymentsMadeCount": 0,
+    "paymentsRemainingCount": 48,
+    "principal": 1500000,
+    "principalPaid": 0,
+    "rate": 12,
+    "remainingInterest": 396036.15,
+    "remainingPrincipal": 1500000,
+    "startDate": "2026-07-14",
+    "status": "Active",
+    "totalInterest": 396036.15,
+    "totalPaid": 0,
+    "totalRepayment": 1896036.15,
+    "type": "Reducing",
+    "userId": "35f0hduvj",
+    "sharing": null
   }
 ]

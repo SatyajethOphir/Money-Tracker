@@ -6,5 +6,69 @@
     "isRead": false,
     "title": "👋 Welcome to EMI Loan Tracker!",
     "userId": "hx0fxgwey"
+  },
+  {
+    "id": "sls6peyzb",
+    "body": "Hi Demo User! Your private debt-free dashboard has been set up successfully. We seeded a welcome loan to help you learn.",
+    "category": "System",
+    "isRead": false,
+    "title": "👋 Welcome to EMI Loan Tracker!",
+    "userId": "mkhjiutl3"
+  },
+  {
+    "id": "mya03brf0",
+    "body": "Hi Sathya Rekha! Your private debt-free dashboard has been set up successfully. We seeded a welcome loan to help you learn.",
+    "category": "System",
+    "isRead": true,
+    "title": "👋 Welcome to EMI Loan Tracker!",
+    "userId": "35f0hduvj"
+  },
+  {
+    "id": "dx90qsk1e",
+    "body": "Your loan of INR 1500000 for \"Anna Loan \" has been successfully added.",
+    "category": "System",
+    "isRead": true,
+    "title": "📈 New Loan Tracker Added",
+    "userId": "35f0hduvj"
+  },
+  {
+    "id": "6kw0zrfpu",
+    "body": "🎉 Great job! You unlocked an achievement: You recorded your first on-time payment!",
+    "category": "Achievement",
+    "isRead": false,
+    "title": "🏆 Achievement Unlocked: First EMI Paid",
+    "userId": "35f0hduvj"
+  },
+  {
+    "id": "7gkwgz6m7",
+    "body": "🌟 Every payment brings you closer to financial freedom!",
+    "category": "Payment",
+    "isRead": false,
+    "title": "EMI Payment Recorded",
+    "userId": "35f0hduvj"
+  },
+  {
+    "id": "d4bhe8ncr",
+    "body": "Your loan of INR 1500000 for \"Anna Loan \" has been successfully added.",
+    "category": "System",
+    "isRead": false,
+    "title": "📈 New Loan Tracker Added",
+    "userId": "35f0hduvj"
+  },
+  {
+    "id": "x3egxsssz",
+    "body": "👏 You're making steady progress toward becoming debt-free on \"LOAN\".",
+    "category": "Payment",
+    "isRead": false,
+    "title": "EMI Payment Recorded",
+    "userId": "45ap7cwd6"
+  },
+  {
+    "id": "vr4hp3f6o",
+    "body": "🎉 Great job! Your EMI of INR 39500.75 has been recorded successfully.",
+    "category": "Payment",
+    "isRead": false,
+    "title": "EMI Payment Recorded",
+    "userId": "45ap7cwd6"
   }
 ]
