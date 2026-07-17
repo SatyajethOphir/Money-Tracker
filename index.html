@@ -59,10 +59,42 @@
         }
       })();
     </script>
+    <script>
+      // Prevent theme flickering during page load
+      (function() {
+        try {
+          var theme = 'system';
+          var savedUser = localStorage.getItem('emi_tracker_user');
+          if (savedUser) {
+            try {
+              var userObj = JSON.parse(savedUser);
+              if (userObj && userObj.preferences && userObj.preferences.theme) {
+                theme = userObj.preferences.theme;
+              }
+            } catch (e) {}
+          } else {
+            var localTheme = localStorage.getItem('emi_tracker_theme');
+            if (localTheme) {
+              theme = localTheme;
+            }
+          }
+          if (theme === 'system') {
+            var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            theme = systemPrefersDark ? 'dark' : 'light';
+          }
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (err) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EMI & Loan Tracker</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
     <meta name="theme-color" content="#06b6d4" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -70,30 +102,6 @@
   <body class="h-full">
     <div id="root" class="h-full"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => {
-              console.log('Service Worker registered successfully:', reg.scope);
-              
-              // Automatically check for service worker updates
-              reg.onupdatefound = () => {
-                const installingWorker = reg.installing;
-                if (installingWorker) {
-                  installingWorker.onstatechange = () => {
-                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                      console.log('New content available, reloading...');
-                      window.location.reload();
-                    }
-                  };
-                }
-              };
-            })
-            .catch(err => console.error('Service Worker registration failed:', err));
-        });
-      }
-    </script>
   </body>
 </html>
 

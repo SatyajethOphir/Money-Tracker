@@ -9,8 +9,6 @@
     "duration": 36,
     "durationUnit": "Months",
     "startDate": "2026-01-15",
-    "createdAt": "2026-07-16T17:51:15.438Z",
-    "updatedAt": "2026-07-16T17:51:15.440Z",
     "emi": 365.06,
     "totalInterest": 1142.28,
     "totalRepayment": 13142.28,
@@ -357,8 +355,6 @@
     "duration": 12,
     "durationUnit": "Months",
     "startDate": "2026-04-01",
-    "createdAt": "2026-07-16T17:51:15.440Z",
-    "updatedAt": "2026-07-16T17:51:15.440Z",
     "emi": 165,
     "totalInterest": 180,
     "totalRepayment": 1980,
@@ -485,30 +481,6 @@
   },
   {
     "id": "welcome-hx0fxgwey",
-    "userId": "hx0fxgwey",
-    "loanName": "Personal Welcome Loan",
-    "lenderName": "Apex Capital",
-    "principal": 5000,
-    "rate": 8.5,
-    "type": "Reducing",
-    "duration": 12,
-    "durationUnit": "Months",
-    "startDate": "2026-06-16",
-    "createdAt": "2026-07-16T17:52:05.610Z",
-    "updatedAt": "2026-07-16T17:52:05.610Z",
-    "emi": 436.1,
-    "totalInterest": 233.19,
-    "totalRepayment": 5233.19,
-    "remainingPrincipal": 4599.28,
-    "remainingInterest": 197.77,
-    "totalPaid": 436.14,
-    "interestPaid": 35.42,
-    "principalPaid": 400.72,
-    "completionPercentage": 8.01,
-    "paymentsMadeCount": 1,
-    "paymentsRemainingCount": 11,
-    "nextEmiDate": "2026-08-16",
-    "status": "Active",
     "amortizationSchedule": [
       {
         "month": 1,
@@ -607,6 +579,14 @@
         "remainingBalance": 0
       }
     ],
+    "completionPercentage": 8.01,
+    "duration": 12,
+    "durationUnit": "Months",
+    "emi": 436.1,
+    "interestPaid": 35.42,
+    "lenderName": "Apex Capital",
+    "loanName": "Personal Welcome Loan",
+    "nextEmiDate": "2026-08-16",
     "payments": [
       {
         "id": "welcome-pay-1",
@@ -618,6 +598,20 @@
         "status": "Paid",
         "notes": "Welcome installment"
       }
-    ]
+    ],
+    "paymentsMadeCount": 1,
+    "paymentsRemainingCount": 11,
+    "principal": 5000,
+    "principalPaid": 400.72,
+    "rate": 8.5,
+    "remainingInterest": 197.77,
+    "remainingPrincipal": 4599.28,
+    "startDate": "2026-06-16",
+    "status": "Active",
+    "totalInterest": 233.19,
+    "totalPaid": 436.14,
+    "totalRepayment": 5233.19,
+    "type": "Reducing",
+    "userId": "hx0fxgwey"
   }
 ]

@@ -1,10 +1,10 @@
 [
   {
     "id": "hx0fxgwey",
-    "fullName": "Satyajeeth Ophir Peruka",
+    "achievements": [],
     "email": "sop@januzen.in",
+    "fullName": "Satyajeeth Ophir Peruka",
     "passwordHash": "$2b$10$ag.WpgNQ5utydZV.Zv4DGOZwJ1f5hG1CQA/R9wQSX8GkteCw1rRI2",
-    "createdAt": "2026-07-16T17:52:05.603Z",
     "preferences": {
       "language": "en",
       "currency": "USD",
@@ -25,7 +25,6 @@
         "maxDaily": 5
       }
     },
-    "pushSubscriptions": [],
-    "achievements": []
+    "pushSubscriptions": []
   }
 ]

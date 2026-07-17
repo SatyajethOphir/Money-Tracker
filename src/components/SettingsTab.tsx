@@ -12,6 +12,8 @@ interface SettingsTabProps {
   onLogout: () => void;
   triggerNotificationPermission: () => Promise<void>;
   t: (key: string) => string;
+  deferredPrompt?: any;
+  onInstallApp?: () => void;
 }
 
 export default function SettingsTab({
@@ -21,7 +23,9 @@ export default function SettingsTab({
   onPreferencesUpdate,
   onLogout,
   triggerNotificationPermission,
-  t
+  t,
+  deferredPrompt,
+  onInstallApp
 }: SettingsTabProps) {
   // Profile Form States
   const [fullName, setFullName] = useState(user.fullName || '');
@@ -447,6 +451,46 @@ export default function SettingsTab({
                   <option value="dark">Dark Slate Mode</option>
                   <option value="system">Follow System</option>
                 </select>
+              </div>
+            </div>
+
+            {/* PWA INSTALLATION SECTION */}
+            <div className="space-y-4 border-t border-zinc-800 pt-6">
+              <h4 className="font-bold text-sm text-zinc-200 flex items-center gap-2">
+                <Settings className="w-4 h-4 text-cyan-400" />
+                Application Installation (PWA)
+              </h4>
+              <p className="text-[10px] text-zinc-500 font-medium">Enjoy a standalone native app experience, offline tracking, and reduced loading times</p>
+              
+              <div className="bg-zinc-950 border border-zinc-800/60 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                  <span className="text-xs font-bold text-zinc-300 block">Installation Status</span>
+                  {window.matchMedia('(display-mode: standalone)').matches ? (
+                    <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1 mt-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                      ✓ Installed & Running Standalone
+                    </span>
+                  ) : deferredPrompt ? (
+                    <span className="text-[10px] text-cyan-400 font-bold flex items-center gap-1 mt-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                      Ready to Install
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-zinc-500 flex items-center gap-1 mt-1">
+                      Running in Web Browser
+                    </span>
+                  )}
+                </div>
+                
+                {deferredPrompt && onInstallApp && (
+                  <button
+                    type="button"
+                    onClick={onInstallApp}
+                    className="w-full md:w-auto px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-zinc-950 transition-all shadow-md shadow-cyan-500/10 cursor-pointer text-center"
+                  >
+                    Install App Now
+                  </button>
+                )}
               </div>
             </div>
 

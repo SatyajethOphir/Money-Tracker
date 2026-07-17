@@ -1,10 +1,19 @@
-const CACHE_NAME = 'emi-tracker-cache-v1';
+const CACHE_NAME = 'emi-tracker-cache-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/favicon.png',
+  '/logo.jpg',
   '/icon.png',
-  '/icon-512.png'
+  '/icon-512.png',
+  '/icon-72.png',
+  '/icon-96.png',
+  '/icon-128.png',
+  '/icon-144.png',
+  '/icon-152.png',
+  '/icon-192.png',
+  '/icon-384.png'
 ];
 
 // Install Event
@@ -149,4 +158,11 @@ self.addEventListener('notificationclick', (event) => {
       }
     })
   );
+});
+
+// Skip waiting message handler for automatic application updates
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });

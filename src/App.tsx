@@ -33,7 +33,8 @@ import {
   LogOut,
   Bell,
   Lock,
-  User
+  User,
+  Download
 } from 'lucide-react';
 import {
   LineChart,
@@ -262,8 +263,39 @@ export default function App() {
   });
 
   // UI Theme / Responsive States
-  const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
+  const [themeMode, setThemeMode] = useState<'dark' | 'light'>(() => {
+    try {
+      var theme = 'system';
+      var savedUser = localStorage.getItem('emi_tracker_user');
+      if (savedUser) {
+        try {
+          var userObj = JSON.parse(savedUser);
+          if (userObj && userObj.preferences && userObj.preferences.theme) {
+            theme = userObj.preferences.theme;
+          }
+        } catch (e) {}
+      } else {
+        var localTheme = localStorage.getItem('emi_tracker_theme');
+        if (localTheme) {
+          theme = localTheme;
+        }
+      }
+      if (theme === 'system') {
+        var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = systemPrefersDark ? 'dark' : 'light';
+      }
+      return theme === 'light' ? 'light' : 'dark';
+    } catch (e) {
+      return 'dark';
+    }
+  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  
+  // PWA Install & Update States
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState<boolean>(false);
+  const [showUpdateBanner, setShowUpdateBanner] = useState<boolean>(false);
+  const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
   
   // PWA Offline Sync States
   const [isOffline, setIsOffline] = useState<boolean>(!navigator.onLine);
@@ -336,26 +368,27 @@ export default function App() {
 
   // Apply user interface theme choices
   useEffect(() => {
-    const activeTheme = user?.preferences?.theme || localStorage.getItem('emi_tracker_theme') || 'dark';
+    const activeTheme = user?.preferences?.theme || localStorage.getItem('emi_tracker_theme') || 'system';
     
+    let resolvedTheme: 'light' | 'dark' = 'dark';
     if (activeTheme === 'light') {
-      setThemeMode('light');
-      document.documentElement.classList.remove('dark');
+      resolvedTheme = 'light';
     } else if (activeTheme === 'dark') {
-      setThemeMode('dark');
-      document.documentElement.classList.add('dark');
+      resolvedTheme = 'dark';
     } else {
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setThemeMode(systemPrefersDark ? 'dark' : 'light');
-      if (systemPrefersDark) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+      resolvedTheme = systemPrefersDark ? 'dark' : 'light';
+    }
+    
+    setThemeMode(resolvedTheme);
+    if (resolvedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
   }, [user]);
 
-  const toggleTheme = () => {
+  const toggleTheme = async () => {
     const nextTheme = themeMode === 'dark' ? 'light' : 'dark';
     setThemeMode(nextTheme);
     localStorage.setItem('emi_tracker_theme', nextTheme);
@@ -363,6 +396,125 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     } else {
       document.documentElement.classList.add('dark');
+    }
+    
+    // Sync to user preferences in DB if logged in
+    if (user && token) {
+      const updatedPrefs = {
+        ...user.preferences,
+        theme: nextTheme
+      };
+      const updatedUser = { ...user, preferences: updatedPrefs };
+      setUser(updatedUser);
+      localStorage.setItem('emi_tracker_user', JSON.stringify(updatedUser));
+      
+      try {
+        await fetch('/api/auth/preferences', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(updatedPrefs)
+        });
+      } catch (err) {
+        console.error('Failed to sync theme to backend:', err);
+      }
+    }
+  };
+
+  // PWA Install prompt and Update listener
+  useEffect(() => {
+    // 1. Check if running in standalone mode
+    if (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone) {
+      setIsInstalled(true);
+    }
+
+    // 2. Listen for PWA install prompt
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+      console.log('PWA was installed successfully');
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    // 3. Register Service Worker and monitor updates
+    if ('serviceWorker' in navigator) {
+      const registerSW = async () => {
+        try {
+          const reg = await navigator.serviceWorker.register('/sw.js');
+          console.log('Service Worker registered in App.tsx:', reg.scope);
+          
+          const onNewServiceWorker = (worker: ServiceWorker) => {
+            setWaitingWorker(worker);
+            setShowUpdateBanner(true);
+          };
+
+          // Check if there is already a waiting worker
+          if (reg.waiting) {
+            onNewServiceWorker(reg.waiting);
+          }
+
+          // Monitor the installing service worker
+          reg.onupdatefound = () => {
+            const installingWorker = reg.installing;
+            if (installingWorker) {
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  onNewServiceWorker(installingWorker);
+                }
+              };
+            }
+          };
+        } catch (err) {
+          console.error('Service Worker registration failed:', err);
+        }
+      };
+
+      // Register after page load
+      if (document.readyState === 'complete') {
+        registerSW();
+      } else {
+        window.addEventListener('load', registerSW);
+      }
+
+      // Handle reload when new controller takes over
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+          refreshing = true;
+          window.location.reload();
+        }
+      });
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to install prompt: ${outcome}`);
+    setDeferredPrompt(null);
+  };
+
+  const handleUpdateApp = () => {
+    if (waitingWorker) {
+      console.log('Sending SKIP_WAITING to waiting service worker...');
+      waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+    } else {
+      window.location.reload();
     }
   };
 
@@ -1069,9 +1221,15 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center space-y-4 font-sans">
-        <div className="w-10 h-10 border-2 border-cyan-500/10 border-t-cyan-400 rounded-full animate-spin" />
-        <span className="text-xs text-zinc-500 font-bold tracking-wider uppercase">Loading Workspace...</span>
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center space-y-6 font-sans select-none animate-pulse">
+        <div className="w-20 h-20 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl">
+          <img src="/logo.jpg" alt="EMI Tracker Logo" className="w-full h-full object-cover animate-spin-slow" />
+        </div>
+        <div className="flex flex-col items-center space-y-2">
+          <div className="w-10 h-10 border-2 border-cyan-500/10 border-t-cyan-400 rounded-full animate-spin mb-2" />
+          <span className="text-xs text-zinc-400 font-bold tracking-widest uppercase">EMI & Loan Tracker</span>
+          <span className="text-[10px] text-zinc-600 tracking-wider">Synchronizing secure data...</span>
+        </div>
       </div>
     );
   }
@@ -1086,8 +1244,8 @@ export default function App() {
       {/* DESKTOP SIDEBAR */}
       <aside id="desktop_sidebar" className="hidden md:flex flex-col w-64 bg-zinc-900 border-r border-zinc-800 shrink-0">
         <div className="flex items-center gap-3 p-6 border-b border-zinc-800">
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-inner">
-            <TrendingUp className="w-5 h-5" />
+          <div className="flex items-center justify-center w-9 h-9 rounded-lg overflow-hidden bg-zinc-950 border border-zinc-800 shadow-inner">
+            <img src="/logo.jpg" alt="EMI Tracker Logo" className="w-full h-full object-cover" />
           </div>
           <div>
             <h1 className="font-semibold text-zinc-100 tracking-tight leading-tight">{t('app_title')}</h1>
@@ -1198,9 +1356,21 @@ export default function App() {
             </button>
           )}
 
+          {/* PWA Install Button */}
+          {deferredPrompt && !isInstalled && (
+            <button
+              id="install_pwa_sidebar"
+              onClick={handleInstallApp}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-zinc-950 transition-all shadow-md shadow-cyan-500/10 cursor-pointer mb-3 animate-pulse"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Install Application
+            </button>
+          )}
+
           {/* Theme switcher */}
           <div className="flex items-center justify-between pt-2">
-            <span className="text-xs text-zinc-500 font-medium">Dark Mode Interface</span>
+            <span className="text-xs text-zinc-500 font-medium">{themeMode === 'dark' ? 'Dark Mode' : 'Light Mode'} Interface</span>
             <button
               id="theme_toggle_sidebar"
               onClick={toggleTheme}
@@ -1218,8 +1388,8 @@ export default function App() {
         {/* MOBILE TOP BAR */}
         <header id="mobile_header" className="flex items-center justify-between md:hidden px-6 py-4 bg-zinc-900 border-b border-zinc-800">
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-              <TrendingUp className="w-4 h-4" />
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden bg-zinc-950 border border-zinc-800">
+              <img src="/logo.jpg" alt="EMI Tracker Logo" className="w-full h-full object-cover" />
             </div>
             <h1 className="font-semibold text-sm text-zinc-100 tracking-tight">EMI Tracker</h1>
           </div>
@@ -1727,7 +1897,7 @@ export default function App() {
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '12px', color: '#f4f4f5' }} />
+                        <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: themeMode === 'dark' ? '#18181b' : '#ffffff', borderColor: themeMode === 'dark' ? '#27272a' : '#cbd5e1', borderRadius: '12px', color: themeMode === 'dark' ? '#f4f4f5' : '#0f172a' }} />
                         <Legend verticalAlign="bottom" height={36} formatter={(value) => <span className="text-xs font-semibold text-zinc-400">{value}</span>} />
                       </PieChart>
                     </ResponsiveContainer>
@@ -1749,10 +1919,10 @@ export default function App() {
                     {costDistributionData.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={costDistributionData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                          <XAxis dataKey="month" stroke="#71717a" fontSize={11} />
-                          <YAxis stroke="#71717a" fontSize={11} tickFormatter={(v) => `$${v}`} />
-                          <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '12px', color: '#f4f4f5' }} />
+                          <CartesianGrid strokeDasharray="3 3" stroke={themeMode === 'dark' ? "#27272a" : "#e2e8f0"} />
+                          <XAxis dataKey="month" stroke={themeMode === 'dark' ? "#71717a" : "#64748b"} fontSize={11} />
+                          <YAxis stroke={themeMode === 'dark' ? "#71717a" : "#64748b"} fontSize={11} tickFormatter={(v) => `$${v}`} />
+                          <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: themeMode === 'dark' ? '#18181b' : '#ffffff', borderColor: themeMode === 'dark' ? '#27272a' : '#cbd5e1', borderRadius: '12px', color: themeMode === 'dark' ? '#f4f4f5' : '#0f172a' }} />
                           <Legend formatter={(value) => <span className="text-xs font-semibold text-zinc-400">{value}</span>} />
                           <Bar dataKey="Principal Portion" stackId="a" fill="#06b6d4" />
                           <Bar dataKey="Interest Portion" stackId="a" fill="#3b82f6" />
@@ -1774,10 +1944,10 @@ export default function App() {
                     {balanceTrendData.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={balanceTrendData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                          <XAxis dataKey="month" stroke="#71717a" fontSize={11} />
-                          <YAxis stroke="#71717a" fontSize={11} tickFormatter={(v) => `$${v}`} />
-                          <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '12px', color: '#f4f4f5' }} />
+                          <CartesianGrid strokeDasharray="3 3" stroke={themeMode === 'dark' ? "#27272a" : "#e2e8f0"} />
+                          <XAxis dataKey="month" stroke={themeMode === 'dark' ? "#71717a" : "#64748b"} fontSize={11} />
+                          <YAxis stroke={themeMode === 'dark' ? "#71717a" : "#64748b"} fontSize={11} tickFormatter={(v) => `$${v}`} />
+                          <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: themeMode === 'dark' ? '#18181b' : '#ffffff', borderColor: themeMode === 'dark' ? '#27272a' : '#cbd5e1', borderRadius: '12px', color: themeMode === 'dark' ? '#f4f4f5' : '#0f172a' }} />
                           <Legend formatter={(value) => <span className="text-xs font-semibold text-zinc-400">{value}</span>} />
                           <Line type="monotone" dataKey="Remaining Liabilities" stroke="#f43f5e" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
                         </LineChart>
@@ -1798,10 +1968,10 @@ export default function App() {
                     {paymentTrendData.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={paymentTrendData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-                          <XAxis dataKey="month" stroke="#71717a" fontSize={11} />
-                          <YAxis stroke="#71717a" fontSize={11} tickFormatter={(v) => `$${v}`} />
-                          <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '12px', color: '#f4f4f5' }} />
+                          <CartesianGrid strokeDasharray="3 3" stroke={themeMode === 'dark' ? "#27272a" : "#e2e8f0"} />
+                          <XAxis dataKey="month" stroke={themeMode === 'dark' ? "#71717a" : "#64748b"} fontSize={11} />
+                          <YAxis stroke={themeMode === 'dark' ? "#71717a" : "#64748b"} fontSize={11} tickFormatter={(v) => `$${v}`} />
+                          <Tooltip formatter={(v: number) => currencyFormatter(v)} contentStyle={{ backgroundColor: themeMode === 'dark' ? '#18181b' : '#ffffff', borderColor: themeMode === 'dark' ? '#27272a' : '#cbd5e1', borderRadius: '12px', color: themeMode === 'dark' ? '#f4f4f5' : '#0f172a' }} />
                           <Legend formatter={(value) => <span className="text-xs font-semibold text-zinc-400">{value}</span>} />
                           <Line type="monotone" dataKey="Amount Paid" stroke="#10b981" strokeWidth={3} activeDot={{ r: 6 }} />
                         </LineChart>
@@ -2052,6 +2222,8 @@ export default function App() {
             <SettingsTab
               user={user}
               token={token || ''}
+              deferredPrompt={deferredPrompt}
+              onInstallApp={handleInstallApp}
               onProfileUpdate={(updatedUser) => {
                 setUser(updatedUser);
                 localStorage.setItem('emi_tracker_user', JSON.stringify(updatedUser));
@@ -2364,6 +2536,35 @@ export default function App() {
         }}
       />
       <AchievementCelebration notifications={notifications} />
+
+      {/* Dynamic PWA Update Toast */}
+      {showUpdateBanner && (
+        <div id="pwa_update_toast" className="fixed bottom-6 right-6 z-50 max-w-sm bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-2xl flex flex-col gap-3 font-sans">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-zinc-100 uppercase tracking-wide">Update Available</h4>
+              <p className="text-[11px] text-zinc-400 mt-1">A new version of Money Tracker is available with enhancements. Activate now to see improvements.</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-2 pt-1 border-t border-zinc-800/60">
+            <button
+              onClick={() => setShowUpdateBanner(false)}
+              className="px-3 py-1.5 rounded-lg text-[10px] font-bold text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Later
+            </button>
+            <button
+              onClick={handleUpdateApp}
+              className="px-3 py-1.5 rounded-lg text-[10px] font-black bg-cyan-500 hover:bg-cyan-400 text-zinc-950 transition-all shadow-md shadow-cyan-500/10 cursor-pointer"
+            >
+              Update Now
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
