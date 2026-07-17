@@ -60,7 +60,8 @@ const loanSchema = new mongoose.Schema({
   nextEmiDate: { type: String, required: true },
   status: { type: String, required: true },
   amortizationSchedule: { type: Array, default: [] },
-  payments: { type: Array, default: [] }
+  payments: { type: Array, default: [] },
+  sharing: { type: mongoose.Schema.Types.Mixed, default: null }
 }, { minimize: false, timestamps: true });
 
 const LoanModel = mongoose.models.Loan || mongoose.model('Loan', loanSchema);
@@ -159,6 +160,32 @@ export interface UserNotification {
   createdAt: string;
 }
 
+export interface LoanSharingLog {
+  action: 'created' | 'revoked' | 'regenerated' | 'accessed';
+  timestamp: string;
+  ip?: string;
+}
+
+export interface LoanSharing {
+  enabled: boolean;
+  token: string;
+  privacy: {
+    showLoanAmount: boolean;
+    showInterestRate: boolean;
+    showEmi: boolean;
+    showPaymentHistory: boolean;
+    showCharts: boolean;
+    showNotes: boolean;
+    showRemainingBalance: boolean;
+    showNextEmiDate: boolean;
+  };
+  expirationType: 'never' | '24h' | '7d' | '30d' | 'custom';
+  expirationDate: string | null;
+  passwordHash: string | null;
+  passwordProtected: boolean;
+  logs: LoanSharingLog[];
+}
+
 export interface Loan {
   id: string;
   userId?: string; // Optional to support unassigned or legacy seed loans
@@ -172,6 +199,7 @@ export interface Loan {
   startDate: string; // YYYY-MM-DD
   createdAt: string;
   updatedAt: string;
+  sharing?: LoanSharing | null;
 
   // Recalculated values (backend source of truth)
   emi: number;

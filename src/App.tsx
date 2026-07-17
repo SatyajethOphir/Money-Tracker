@@ -34,7 +34,8 @@ import {
   Bell,
   Lock,
   User,
-  Download
+  Download,
+  Share2
 } from 'lucide-react';
 import {
   LineChart,
@@ -55,6 +56,8 @@ import {
 import AuthPages from './components/AuthPages';
 import NotificationCenter, { AchievementCelebration } from './components/NotificationCenter';
 import SettingsTab from './components/SettingsTab';
+import ShareLoanModal from './components/ShareLoanModal';
+import SharedLoanView from './components/SharedLoanView';
 import { UserNotification } from './types';
 import { getTranslation } from './lib/translations';
 
@@ -215,6 +218,14 @@ interface OfflineAction {
 }
 
 export default function App() {
+  const sharedPathToken = useMemo(() => {
+    const path = window.location.pathname;
+    if (path.startsWith('/shared/')) {
+      return path.split('/shared/')[1]?.trim();
+    }
+    return null;
+  }, []);
+
   // Navigation & General State
   const [currentTab, setCurrentTab] = useState<'dashboard' | 'analytics' | 'loan-details' | 'settings'>('dashboard');
   const [selectedLoanId, setSelectedLoanId] = useState<string | null>(null);
@@ -243,6 +254,8 @@ export default function App() {
   // Modal / Form States
   const [isLoanModalOpen, setIsLoanModalOpen] = useState<boolean>(false);
   const [editingLoan, setEditingLoan] = useState<Loan | null>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [sharingLoan, setSharingLoan] = useState<any | null>(null);
   const [loanFormData, setLoanFormData] = useState({
     loanName: '',
     lenderName: '',
@@ -927,6 +940,11 @@ export default function App() {
     }
   };
 
+  const handleUpdateLoanSharing = (updatedLoan: any) => {
+    setLoans(prev => prev.map(l => l.id === updatedLoan.id ? updatedLoan : l));
+    setSharingLoan(updatedLoan);
+  };
+
   const handleDeletePayment = async (paymentId: string) => {
     if (!selectedLoanId || !window.confirm('Delete this payment record?')) return;
 
@@ -1232,6 +1250,10 @@ export default function App() {
         </div>
       </div>
     );
+  }
+
+  if (sharedPathToken) {
+    return <SharedLoanView token={sharedPathToken} />;
   }
 
   if (!user) {
@@ -2019,6 +2041,14 @@ export default function App() {
 
                 <div className="flex items-center gap-2">
                   <button
+                    id="share_loan_btn"
+                    onClick={() => { setSharingLoan(selectedLoan); setIsShareModalOpen(true); }}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-800/30 text-cyan-400 transition-all cursor-pointer animate-pulse-subtle"
+                  >
+                    <Share2 className="w-3.5 h-3.5" />
+                    Share Loan
+                  </button>
+                  <button
                     id="edit_loan_btn"
                     onClick={() => openEditLoan(selectedLoan)}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-200 transition-all cursor-pointer"
@@ -2496,6 +2526,16 @@ export default function App() {
             </form>
           </div>
         </div>
+      )}
+
+      {isShareModalOpen && sharingLoan && (
+        <ShareLoanModal
+          isOpen={isShareModalOpen}
+          onClose={() => { setIsShareModalOpen(false); setSharingLoan(null); }}
+          loan={sharingLoan}
+          token={token || ''}
+          onUpdateLoan={handleUpdateLoanSharing}
+        />
       )}
 
       <NotificationCenter

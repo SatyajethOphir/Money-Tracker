@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 import {
   readLoans,
@@ -44,6 +45,79 @@ const getCookie = (req: express.Request, name: string): string => {
   }, {} as Record<string, string>);
   return cookies[name] || '';
 };
+
+// Apply privacy filtering before sending shared loan data to a visitor
+function applyPrivacyFilter(loan: Loan, privacy: any, currency: string = 'USD'): Loan {
+  const filtered = JSON.parse(JSON.stringify(loan)) as Loan;
+
+  filtered.id = 'shared-loan';
+  (filtered as any).currency = currency;
+  delete filtered.userId;
+  if ((filtered as any)._id) delete (filtered as any)._id;
+  if ((filtered as any)._v) delete (filtered as any)._v;
+
+  if (filtered.sharing) {
+    filtered.sharing = {
+      enabled: true,
+      token: filtered.sharing.token,
+      privacy: filtered.sharing.privacy,
+      expirationType: filtered.sharing.expirationType,
+      expirationDate: filtered.sharing.expirationDate,
+      passwordProtected: filtered.sharing.passwordProtected,
+      passwordHash: null,
+      logs: [] // never expose access logs to public view
+    };
+  }
+
+  const p = privacy || {
+    showLoanAmount: true,
+    showInterestRate: true,
+    showEmi: true,
+    showPaymentHistory: true,
+    showCharts: true,
+    showNotes: true,
+    showRemainingBalance: true,
+    showNextEmiDate: true
+  };
+
+  if (!p.showLoanAmount) {
+    filtered.principal = 0;
+    filtered.totalRepayment = 0;
+    filtered.totalPaid = 0;
+    filtered.principalPaid = 0;
+  }
+  if (!p.showInterestRate) {
+    filtered.rate = 0;
+    filtered.totalInterest = 0;
+    filtered.interestPaid = 0;
+    filtered.remainingInterest = 0;
+  }
+  if (!p.showEmi) {
+    filtered.emi = 0;
+  }
+  if (!p.showRemainingBalance) {
+    filtered.remainingPrincipal = 0;
+    filtered.remainingInterest = 0;
+    filtered.completionPercentage = 0;
+  }
+  if (!p.showNextEmiDate) {
+    filtered.nextEmiDate = 'Hidden';
+  }
+  if (!p.showPaymentHistory) {
+    filtered.payments = [];
+  } else {
+    filtered.payments = filtered.payments.map(pmt => ({
+      ...pmt,
+      notes: p.showNotes ? pmt.notes : ''
+    }));
+  }
+
+  if (!p.showCharts) {
+    filtered.amortizationSchedule = [];
+  }
+
+  return filtered;
+}
 
 // ---------------------------------------------------------
 // AUTHENTICATION MIDDLEWARE
@@ -920,6 +994,234 @@ app.delete('/api/loans/:id', authMiddleware, (req: AuthenticatedRequest, res) =>
     res.json({ success: true, message: 'Loan deleted successfully' });
   } catch (error) {
     console.error('Error deleting loan:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ---------------------------------------------------------
+// LOAN SHARING ENDPOINTS
+// ---------------------------------------------------------
+
+// Enable or update loan sharing settings
+app.post('/api/loans/:id/share', authMiddleware, async (req: AuthenticatedRequest, res) => {
+  try {
+    const user = req.user!;
+    const { privacy, expirationType, expirationDate, password, regenerate } = req.body;
+    const loans = readLoans();
+    const idx = loans.findIndex(l => l.id === req.params.id && l.userId === user.id);
+    if (idx === -1) {
+      return res.status(404).json({ error: 'Loan not found' });
+    }
+
+    const loan = loans[idx];
+    let currentSharing = loan.sharing;
+
+    let token = currentSharing?.token;
+    if (!token || regenerate) {
+      token = crypto.randomBytes(8).toString('hex');
+    }
+
+    let passwordHash = currentSharing?.passwordHash || null;
+    let passwordProtected = currentSharing?.passwordProtected || false;
+
+    if (password !== undefined) {
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        passwordHash = await bcrypt.hash(password, salt);
+        passwordProtected = true;
+      } else {
+        passwordHash = null;
+        passwordProtected = false;
+      }
+    }
+
+    // Expiration calculation
+    let calculatedExpDate: string | null = null;
+    const now = new Date();
+    if (expirationType === '24h') {
+      calculatedExpDate = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
+    } else if (expirationType === '7d') {
+      calculatedExpDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    } else if (expirationType === '30d') {
+      calculatedExpDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    } else if (expirationType === 'custom' && expirationDate) {
+      calculatedExpDate = new Date(expirationDate).toISOString();
+    }
+
+    const logs = currentSharing?.logs || [];
+    logs.push({
+      action: regenerate ? 'regenerated' : 'created',
+      timestamp: new Date().toISOString(),
+      ip: req.ip
+    });
+
+    loan.sharing = {
+      enabled: true,
+      token,
+      privacy: privacy || {
+        showLoanAmount: true,
+        showInterestRate: true,
+        showEmi: true,
+        showPaymentHistory: true,
+        showCharts: true,
+        showNotes: true,
+        showRemainingBalance: true,
+        showNextEmiDate: true
+      },
+      expirationType: expirationType || 'never',
+      expirationDate: calculatedExpDate,
+      passwordHash,
+      passwordProtected,
+      logs
+    };
+
+    loans[idx] = loan;
+    writeLoans(loans);
+
+    // Write a security notification
+    sendNotificationToUser(
+      user.id,
+      '🔒 Loan Shared Successfully',
+      `Sharing has been ${regenerate ? 'regenerated' : 'enabled'} for "${loan.loanName}". You can manage privacy and password controls anytime.`,
+      'System'
+    );
+
+    res.json(loan);
+  } catch (error) {
+    console.error('Error enabling loan sharing:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Revoke sharing for a loan
+app.delete('/api/loans/:id/share', authMiddleware, (req: AuthenticatedRequest, res) => {
+  try {
+    const user = req.user!;
+    const loans = readLoans();
+    const idx = loans.findIndex(l => l.id === req.params.id && l.userId === user.id);
+    if (idx === -1) {
+      return res.status(404).json({ error: 'Loan not found' });
+    }
+
+    const loan = loans[idx];
+    if (loan.sharing) {
+      loan.sharing.enabled = false;
+      loan.sharing.logs.push({
+        action: 'revoked',
+        timestamp: new Date().toISOString(),
+        ip: req.ip
+      });
+    }
+
+    loans[idx] = loan;
+    writeLoans(loans);
+
+    // Notification
+    sendNotificationToUser(
+      user.id,
+      '🔒 Loan Sharing Revoked',
+      `Shared access link for "${loan.loanName}" has been successfully disabled and revoked.`,
+      'System'
+    );
+
+    res.json(loan);
+  } catch (error) {
+    console.error('Error revoking loan sharing:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Public endpoint to validate shared token
+app.get('/api/shared/validate/:token', (req, res) => {
+  try {
+    const { token } = req.params;
+    const loans = readLoans();
+    const loan = loans.find(l => l.sharing && l.sharing.token === token && l.sharing.enabled);
+
+    if (!loan) {
+      return res.status(404).json({ error: 'Shared loan not found, or sharing has been disabled.' });
+    }
+
+    const sharing = loan.sharing!;
+
+    // Check expiration
+    if (sharing.expirationDate && new Date(sharing.expirationDate) < new Date()) {
+      return res.status(410).json({ error: 'This shared link has expired.' });
+    }
+
+    if (sharing.passwordProtected) {
+      return res.json({ passwordRequired: true, loanName: loan.loanName });
+    }
+
+    // Access logging
+    sharing.logs.push({
+      action: 'accessed',
+      timestamp: new Date().toISOString(),
+      ip: req.ip
+    });
+    writeLoans(loans);
+
+    // Fetch owner currency preference
+    const users = readUsers();
+    const owner = users.find(u => u.id === loan.userId);
+    const currency = owner?.preferences?.currency || 'USD';
+
+    // Apply privacy controls
+    const filteredLoan = applyPrivacyFilter(loan, sharing.privacy, currency);
+    res.json(filteredLoan);
+  } catch (error) {
+    console.error('Error validating shared token:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Public endpoint to unlock password-protected shared page
+app.post('/api/shared/unlock/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+    const loans = readLoans();
+    const loan = loans.find(l => l.sharing && l.sharing.token === token && l.sharing.enabled);
+
+    if (!loan) {
+      return res.status(404).json({ error: 'Shared loan not found, or sharing has been disabled.' });
+    }
+
+    const sharing = loan.sharing!;
+
+    // Check expiration
+    if (sharing.expirationDate && new Date(sharing.expirationDate) < new Date()) {
+      return res.status(410).json({ error: 'This shared link has expired.' });
+    }
+
+    if (sharing.passwordProtected) {
+      if (!password) {
+        return res.status(400).json({ error: 'Password is required to unlock this shared loan.' });
+      }
+      const isMatch = await bcrypt.compare(password, sharing.passwordHash || '');
+      if (!isMatch) {
+        return res.status(401).json({ error: 'Incorrect password. Access denied.' });
+      }
+    }
+
+    // Access logging
+    sharing.logs.push({
+      action: 'accessed',
+      timestamp: new Date().toISOString(),
+      ip: req.ip
+    });
+    writeLoans(loans);
+
+    // Fetch owner currency preference
+    const users = readUsers();
+    const owner = users.find(u => u.id === loan.userId);
+    const currency = owner?.preferences?.currency || 'USD';
+
+    // Apply privacy controls
+    const filteredLoan = applyPrivacyFilter(loan, sharing.privacy, currency);
+    res.json(filteredLoan);
+  } catch (error) {
+    console.error('Error unlocking shared token:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
