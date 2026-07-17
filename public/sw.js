@@ -102,7 +102,8 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         }).catch(() => {
           // If HTML request fails and offline, return the index.html fallback
-          if (request.headers.get('accept').includes('text/html')) {
+          const acceptHeader = request.headers.get('accept');
+          if (request.mode === 'navigate' || (acceptHeader && acceptHeader.includes('text/html'))) {
             return caches.match('/');
           }
         });
