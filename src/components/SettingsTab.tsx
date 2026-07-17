@@ -1,6 +1,6 @@
 import React, { useState, FormEvent, useRef } from 'react';
 import { 
-  User, Mail, Camera, Save, Lock, LogOut, Trash2, Bell, Settings, Languages, DollarSign, Eye, EyeOff, ShieldAlert, BadgeInfo 
+  User, Mail, Camera, Save, Lock, LogOut, Trash2, Bell, Settings, Languages, DollarSign, Eye, EyeOff, ShieldAlert, BadgeInfo, Share, PlusSquare, Smartphone, Laptop 
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -492,6 +492,37 @@ export default function SettingsTab({
                   </button>
                 )}
               </div>
+
+              {!window.matchMedia('(display-mode: standalone)').matches && (
+                <div className="bg-zinc-950/40 border border-zinc-800/50 rounded-2xl p-4 mt-2 space-y-3">
+                  <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block">How to Install on Your Device</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="bg-zinc-900/60 border border-zinc-800/50 rounded-xl p-3 space-y-2">
+                      <div className="flex items-center gap-1.5 text-zinc-200 text-xs font-bold">
+                        <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
+                        iOS (iPhone & iPad)
+                      </div>
+                      <ol className="text-[10px] text-zinc-400 space-y-1.5 list-decimal list-inside">
+                        <li>Open this page in Safari.</li>
+                        <li>Tap the <span className="text-zinc-200">Share</span> button <Share className="w-3.5 h-3.5 inline text-cyan-400" />.</li>
+                        <li>Tap <span className="text-cyan-400 font-semibold">Add to Home Screen</span> <PlusSquare className="w-3.5 h-3.5 inline text-cyan-400" />.</li>
+                      </ol>
+                    </div>
+
+                    <div className="bg-zinc-900/60 border border-zinc-800/50 rounded-xl p-3 space-y-2">
+                      <div className="flex items-center gap-1.5 text-zinc-200 text-xs font-bold">
+                        <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
+                        Android (Chrome)
+                      </div>
+                      <ol className="text-[10px] text-zinc-400 space-y-1.5 list-decimal list-inside">
+                        <li>Tap menu <span className="text-zinc-200 font-bold">⋮</span> top right.</li>
+                        <li>Select <span className="text-cyan-400 font-semibold">"Install app"</span> or <span className="text-zinc-200 font-semibold">"Add to Home Screen"</span>.</li>
+                        <li>Launch directly from your apps.</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* NOTIFICATION PREFERENCES SECTION */}

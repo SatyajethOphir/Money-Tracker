@@ -58,6 +58,7 @@ import NotificationCenter, { AchievementCelebration } from './components/Notific
 import SettingsTab from './components/SettingsTab';
 import ShareLoanModal from './components/ShareLoanModal';
 import SharedLoanView from './components/SharedLoanView';
+import PWAPrompt from './components/PWAPrompt';
 import { UserNotification } from './types';
 import { getTranslation } from './lib/translations';
 
@@ -2605,6 +2606,13 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* Dynamic PWA Promotion Prompt */}
+      <PWAPrompt
+        deferredPrompt={deferredPrompt}
+        onInstallApp={handleInstallApp}
+        isInstalled={isInstalled}
+      />
 
     </div>
   );
